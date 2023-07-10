@@ -61,7 +61,7 @@ export default function Register() {
                                 {errors.phone && <span className='text-red-500 text-xs mt-2'>This field is required</span>}
                             </div>
                             {
-                                loader ? <button className=" w-full btn btn-primary text-white  font-medium rounded-lg text-sm px-5 py-2.5 text-center "> <span className="loading loading-spinner"></span> Verifying Credientials ! </button> : <button type="submit" className="w-full btn btn-primary text-white  font-medium rounded-lg text-sm px-5 py-2.5 text-center ">Sign Up</button>
+                                loader ? <button className=" w-full btn btn-primary text-white  font-medium rounded-lg text-sm px-5 py-2.5 text-center "> <span className="loading loading-spinner"></span> Creating Account ! </button> : <button type="submit" className="w-full btn btn-primary text-white  font-medium rounded-lg text-sm px-5 py-2.5 text-center ">Sign Up</button>
                             }
 
                             <p className="text-sm font-light text-gray-500 dark:text-gray-400">

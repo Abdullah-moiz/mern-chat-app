@@ -1,14 +1,30 @@
-import React, { useState } from 'react'
+import React, { useEffect , useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { LoginFormValues } from '../types';
-import { useForm, SubmitHandler} from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { login_user } from '../services';
+import { useDispatch, useSelector } from 'react-redux';
+import { setToken, setUserData } from '../slices/userSlice';
+import { RootState } from '../store/store';
+
 
 
 
 
 export default function Login() {
-    const [loader , setLoader] = useState(false)
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [loader, setLoader] = useState(false)
+
+    const token =  useSelector((state : RootState) => state.User.token)
+    const userData =  useSelector((state : RootState) => state.User.user)
+
+    useEffect(() => {
+        if (token || userData) {
+            navigate('/chat')
+        }
+    }, [token, userData])
 
 
     const { register, formState: { errors }, handleSubmit } = useForm<LoginFormValues>({
@@ -16,8 +32,21 @@ export default function Login() {
     });
 
     const onSubmit: SubmitHandler<LoginFormValues> = async data => {
+
         setLoader(true)
-        console.log(data)
+
+        const res = await login_user(data);
+
+        if (res?.success) {
+            toast.success(res?.message)
+            dispatch(setToken(res?.finalData?.token));
+            dispatch(setUserData(res?.finalData?.user))
+            setLoader(false)
+            navigate('/chat')
+        } else {
+            setLoader(false)
+            toast.error(res?.message)
+        }
     }
 
 

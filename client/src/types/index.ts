@@ -11,3 +11,14 @@ export type RegisterFormValues = {
     email: string;
 };
 
+
+export interface userState {
+    token: string;
+    user: userData | null;
+}
+
+interface userData {
+    email: string;
+    name: string;
+    phone: string;
+}
