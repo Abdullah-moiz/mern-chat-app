@@ -7,7 +7,6 @@ import jwt from 'jsonwebtoken';
 
 export const LoginUser = async (req, res) => {
     const data = req.body;
-    console.log(data)
     const { email, password } = data;
     const { error } = LoginschemaValidation.validate({ email, password });
 

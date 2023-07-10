@@ -42,7 +42,9 @@ export default function Chat() {
 
                     </div>
                 </div>
-                <div className={`${chatSelected && "flex" }  w-8/12 h-full border md:flex hidden flex-col`}>
+
+                
+                <div className={`${chatSelected ? "flex" : "hidden"} w-8/12 bg-red-500 h-full border md:flex hidden flex-col`}>
 
                     
                     {
@@ -55,6 +57,7 @@ export default function Chat() {
                    
 
                 </div>
+
             </div>
         </div>
     )
