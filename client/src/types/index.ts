@@ -22,3 +22,8 @@ interface userData {
     name: string;
     phone: string;
 }
+
+
+export interface chatState {
+    chatSelected: boolean;
+}
