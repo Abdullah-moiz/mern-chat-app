@@ -17,13 +17,15 @@ export interface userState {
     user: userData | null;
 }
 
-interface userData {
+export interface userData {
     email: string;
     name: string;
     phone: string;
+    id: string;
 }
 
 
 export interface chatState {
     chatSelected: boolean;
+    allUsers: userData[];
 }

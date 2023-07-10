@@ -1,60 +1,76 @@
 import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../store/store'
 import { useNavigate } from 'react-router-dom'
 import ConversationCard from '../components/ConversationCard';
 import ChatCard from '../components/ChatCard';
-import { AiOutlineSend } from 'react-icons/ai';
 import DummyChatCard from '../components/DummyChatCard';
+import { socket } from '../App';
+import { setAllUserData } from '../slices/chatSlice';
+
+
+
 
 export default function Chat() {
     const navigate = useNavigate();
+    const dispatch  = useDispatch();
     const chatSelected = useSelector((state: RootState) => state.Chat.chatSelected)
     const token = useSelector((state: RootState) => state.User.token)
     const userData = useSelector((state: RootState) => state.User.user)
+    const allUsers = useSelector((state: RootState) => state.Chat.allUsers)
 
     useEffect(() => {
         if (!token || !userData) {
             navigate('/')
         }
     }, [token, userData])
+    
 
+    useEffect(() => {
+        if(userData) socket.emit('getAllUsers', userData?.id)
+        socket.on('getAllUsers', (data) => {
+            dispatch(setAllUserData(data))
+        })
+        return () => {
+            socket.off('getAllUsers')
+        }
+    },[])
+
+   
 
     return (
         <div className='w-full  min-h-screen bg-gray-100 flex items-center justify-center'>
             <div className='md:w-10/12 mx-2 w-full h-[600px]  flex '>
 
                 <div className={`md:flex ${chatSelected ? "hidden" : "flex"} w-full md:w-4/12 h-full   flex-col`}>
-                    <div className='w-full h-20 flex items-center justify-center bg-indigo-600 text-center'>
+                    <div className='w-full h-[4.4rem] flex items-center justify-center bg-indigo-600 text-center'>
                         <h1 className='text-white/90 font-semibold tracking-widest'>Start Conversation</h1>
                     </div>
                     <div className={`  w-full h-full  overflow-y-auto   overflow-x-hidden py-2`}>
 
-                        <ConversationCard />
-                        <ConversationCard />
-                        <ConversationCard />
-                        <ConversationCard />
-                        <ConversationCard />
-                        <ConversationCard />
-                        <ConversationCard />
-                        <ConversationCard />
+                        {
+                            allUsers?.map((user) => {
+                                return <ConversationCard key={user.id} id={user.id} name={user.name} email={user.name} phone={user.phone}  />
+                            })
+                        }
+                        
 
 
                     </div>
                 </div>
 
-                
-                <div className={`${chatSelected ? "flex" : "hidden"} w-8/12 bg-red-500 h-full border md:flex hidden flex-col`}>
 
-                    
+                <div className={`${chatSelected ? "flex w-full" : "hidden"} w-8/12  h-full  md:flex  flex-col`}>
+
+
                     {
                         chatSelected ? <ChatCard /> : <DummyChatCard />
                     }
-                    
 
 
 
-                   
+
+
 
                 </div>
 

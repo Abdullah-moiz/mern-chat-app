@@ -1,12 +1,23 @@
-import React from 'react'
+import React , {useEffect} from 'react'
 import { AiOutlineSend } from 'react-icons/ai';
 import { RxCross2 } from 'react-icons/rx';
 import { useDispatch } from 'react-redux';
 import { setChatSelected } from '../slices/chatSlice';
+import { socket } from '../App';
+
+
 
 export default function ChatCard() {
     const dispatch = useDispatch()
+    const [message, setMessage] = React.useState('')
 
+  
+
+    const handleSendMessage = (e : React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        socket.emit('message', message)
+       
+    }
 
     return (
         <>
@@ -49,10 +60,10 @@ export default function ChatCard() {
 
             </div>
 
-            <div className='h-20 flex items-center justify-start px-4'>
-                <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-full" />
-                <button className='btn btn-circle btn-primary mx-3'><AiOutlineSend className="text-xl" /></button>
-            </div>
+            <form onSubmit={handleSendMessage} className='h-20 flex items-center justify-start px-4'>
+                <input onChange={(e) => setMessage(e.target.value)} type="text" placeholder="Type here" className="input input-bordered w-full max-w-full" />
+                <button type='submit' className='btn btn-circle btn-primary mx-3'><AiOutlineSend className="text-xl" /></button>
+            </form>
         </>
     )
 }

@@ -4,11 +4,29 @@ import bodyParser from "body-parser";
 import OurRouter from './routes/Route.js'
 import cors from "cors";
 import dotenv from 'dotenv';
+import { createServer } from "http";
+import { Server } from "socket.io";
+import { getAllUsers } from "./controller/chat.js";
+import User from "./models/User.js";
 
 dotenv.config();
 const app = express();
 const port = 8000;
 const connectionUrl = process.env.ConnectionUrl;
+
+const httpServer = createServer(app);
+
+
+
+
+export const io = new Server(httpServer, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"],
+    }
+});
+
+
 
 
 
@@ -24,6 +42,14 @@ mongoose.connect(connectionUrl, { useNewUrlParser: true, useUnifiedTopology: tru
     .catch((err) => console.log("Getting Error from DB connection" + err.message))
 
 
+// socket io
+io.on("connection", (socket) => {
+    socket.on('getAllUsers', async (payload) => {
+        const getUsers = await User.find({ _id: { $ne: payload } }).select('-password');
+        io.emit('getAllUsers', getUsers);
+    })
+});
+
 app.use('/api/', OurRouter)
 
 
@@ -31,6 +57,7 @@ app.use('/api/', OurRouter)
 
 
 
-app.listen(port, () => {
+
+httpServer.listen(port, () => {
     console.log(`App is running at http://localhost:${port}`);
 })
