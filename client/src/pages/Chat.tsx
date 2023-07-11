@@ -52,9 +52,7 @@ export default function Chat() {
         const res = await getChatData(getMessages);
         if (res?.success) {
             dispatch(setMessages(res?.data))
-        } else {
-            toast.error(res?.message)
-        }
+        } 
 
     }
 
@@ -63,9 +61,9 @@ export default function Chat() {
 
     return (
         <div className='w-full  min-h-screen bg-gray-100 flex items-center justify-center'>
-            <div className='md:w-10/12 mx-2 w-full h-[600px]  flex '>
+            <div className='lg:w-10/12 mx-2 w-full h-[600px]  flex '>
 
-                <div className={`md:flex ${chatSelected ? "hidden" : "flex"} w-full md:w-4/12 h-full   flex-col`}>
+                <div className={`lg:flex ${chatSelected ? "hidden" : "flex"} w-full lg:w-4/12 h-full   flex-col`}>
                     <div className='w-full h-[4.4rem] flex items-center justify-center bg-indigo-600 text-center'>
                         <h1 className='text-white/90 font-semibold tracking-widest'>Start Conversation</h1>
                     </div>
@@ -84,7 +82,7 @@ export default function Chat() {
                 </div>
 
 
-                <div className={`${chatSelected ? "flex w-full" : "hidden"} w-8/12  h-full  md:flex  flex-col`}>
+                <div className={`${chatSelected ? "flex w-full" : "hidden"} w-8/12  h-full  lg:flex  flex-col`}>
 
 
                     {

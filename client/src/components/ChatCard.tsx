@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { AiOutlineSend } from 'react-icons/ai';
 import { RxCross2 } from 'react-icons/rx';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,6 +13,7 @@ import { send_message } from '../services';
 
 export default function ChatCard() {
     const dispatch = useDispatch()
+    const [typing, setIsTyping] = useState(false);
     const messageContainerRef = useRef<HTMLDivElement>(null);
     const [sendMessage, setSendMessage] = React.useState('')
     const user = useSelector((state: RootState) => state.User.user)
@@ -58,6 +59,58 @@ export default function ChatCard() {
         };
     }, [])
 
+    useEffect(() => {
+        const handleUserIsTyping = () => {
+            if (sendMessage !== '') {
+                socket.emit('userIsTyping', { senderId: user?._id, receiverId: receiver?._id });
+            } else {
+                socket.emit('userStopTyping', { senderId: user?._id, receiverId: receiver?._id });
+            }
+        };
+
+        const timeoutId = setTimeout(handleUserIsTyping, 500);
+
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, [sendMessage]);
+
+
+    useEffect(() => {
+        const handleTyping = (data: any) => {
+            const { senderId } = data;
+            if (senderId !== user?._id && senderId === receiver?._id) {
+                setIsTyping(true);
+            }
+        };
+
+        socket.on('userIsTyping', handleTyping);
+
+        return () => {
+            socket.off('userIsTyping', handleTyping);
+        };
+    }, []);
+
+
+    useEffect(() => {
+        const handleUserStopTyping = () => {
+            setIsTyping(false);
+        };
+
+        socket.on('userStopTyping', handleUserStopTyping);
+
+        return () => {
+            socket.off('userStopTyping', handleUserStopTyping);
+        };
+    }, []);
+
+
+
+
+
+
+
+    console.log(typing)
 
     return (
         <>
@@ -66,11 +119,15 @@ export default function ChatCard() {
 
                     <div className="avatar mx-4 placeholder">
                         <div className="bg-neutral-focus text-neutral-content rounded-full w-8">
-                            <span className="text-xs">AA</span>
+                            <span className="text-xs">{receiver?.name.substring(0, 2)}</span>
                         </div>
                     </div>
-
-                    <h1 className='text-white/90 font-semibold tracking-widest '>{receiver?.name}</h1>
+                    <div className='flex flex-col   text-left py-2 '>
+                        <h1 className='text-white/90 font-semibold tracking-widest text-sm uppercase'>{receiver?.name}</h1>
+                        {
+                            typing && <p className='text-xs text-white tracking-widest font-semibold'>Typing...</p>
+                        }
+                    </div>
                 </div>
 
                 <button onClick={() => dispatch(setChatSelected(false))} className='btn btn-circle mx-4'><RxCross2 className="text-2xl" /></button>
@@ -85,9 +142,9 @@ export default function ChatCard() {
                     messages.map((message, i) => {
                         return (
                             <div key={i} className={`chat ${message.sender === user?._id ? 'chat-end' : 'chat-start'}`}>
-                                <div className="chat-image avatar">
-                                    <div className="w-10 rounded-full">
-                                        <span>{message.sender === user?._id ? "You" : "Other"}</span>
+                                <div className="avatar chat-image mx-4 placeholder">
+                                    <div className="bg-neutral-focus text-neutral-content rounded-full w-8">
+                                        <span className="text-xs">{message.sender === user?._id ? "Y" : "O"}</span>
                                     </div>
                                 </div>
                                 <div className="chat-bubble">{message.message}</div>
@@ -104,6 +161,7 @@ export default function ChatCard() {
                 <input value={sendMessage} onChange={(e) => setSendMessage(e.target.value)} type="text" placeholder="Type here" className="input input-bordered w-full max-w-full" />
                 <button type='submit' className='btn btn-circle btn-primary mx-3'><AiOutlineSend className="text-xl" /></button>
             </form>
+
         </>
     )
 }

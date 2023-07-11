@@ -15,6 +15,15 @@ const ChatSchema = new mongoose.Schema({
         type: String,
         required: [true, "Please provide a message"],
     },
+    typing : {
+        type : Boolean,
+        default : false
+    },
+    read : {
+        type : Boolean,
+        default : false
+    },
+    
     
 },{timestamps : true});
 

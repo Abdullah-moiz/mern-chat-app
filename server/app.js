@@ -45,8 +45,18 @@ mongoose.connect(connectionUrl, { useNewUrlParser: true, useUnifiedTopology: tru
 io.on("connection", (socket) => {
     socket.on('sendMsg', async (payload) => {
         console.log(payload)
-        io.emit('sendMsg', payload );
+        io.emit('sendMsg', payload);
     });
+
+    socket.on('userIsTyping', async (payload) => {
+        const { senderId, receiverId } = payload;
+        io.emit('userIsTyping', { senderId, receiverId });
+    })
+
+    socket.on('userStopTyping', async (payload) => {
+        const { senderId, receiverId } = payload;
+        io.emit('userStopTyping', { senderId, receiverId });
+    })
 });
 
 app.use('/api/', OurRouter)
