@@ -29,6 +29,7 @@ export interface chatState {
     chatSelected: boolean;
     allUsers: userData[];
     receiverSelected: receiverSelected | null;
+    messages: message[];
 }
 
 export interface receiverSelected{
@@ -38,9 +39,7 @@ export interface receiverSelected{
 }
 
 
-export interface messageState {
-    messages: message[];
-}
+
 
 
 export interface message {

@@ -7,14 +7,14 @@ export const login_user = async (formData: unknown) => {
             },
             body: JSON.stringify(formData)
         });
-    
+
         const data = await res.json();
         return data;
-    } catch (error  :  any) {
+    } catch (error: any) {
         console.log('Error at login_user: ', error.message);
     }
 
-  
+
 }
 
 export const register_user = async (formData: unknown) => {
@@ -26,10 +26,55 @@ export const register_user = async (formData: unknown) => {
             },
             body: JSON.stringify(formData)
         });
-    
+
         const data = await res.json();
         return data;
-    } catch (error  :  any) {
+    } catch (error: any) {
         console.log('Error at register_user : ', error.message);
+    }
+}
+
+
+export const get_all_users = async (id: unknown) => {
+    try {
+        const res = await fetch(`http://localhost:8000/api/get-all-users?id=${id}`, {
+            method: 'GET',
+        });
+        const data = await res.json();
+        return data;
+    } catch (error: any) {
+        console.log('Error at get_all_users (services) : ', error.message);
+    }
+}
+
+
+export const getChatData = async (data: any) => {
+    const { senderId, receiverId } = data;
+    try {
+        const res = await fetch(`http://localhost:8000/api/get-user-chat?senderId=${senderId}&receiverId=${receiverId}`, {
+            method: 'GET',
+        });
+        const data = await res.json();
+        return data;
+    } catch (error: any) {
+        console.log('Error at get_all_users (services) : ', error.message);
+    }
+}
+
+
+export const send_message = async (formData: any) => {
+
+    try {
+        const res = await fetch(`http://localhost:8000/api/send-user-message`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
+        const data = await res.json();
+        return data;
+    } catch (error: any) {
+        console.log('Error at send message (services) : ', error.message);
     }
 }

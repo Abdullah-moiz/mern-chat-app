@@ -1,47 +1,76 @@
-import React , {useEffect} from 'react'
+import React, { useRef, useEffect } from 'react'
 import { AiOutlineSend } from 'react-icons/ai';
 import { RxCross2 } from 'react-icons/rx';
 import { useDispatch, useSelector } from 'react-redux';
-import { setChatSelected } from '../slices/chatSlice';
+import { setChatSelected, setMessages } from '../slices/chatSlice';
 import { socket } from '../App';
+import { toast } from 'react-toastify';
 import { RootState } from '../store/store';
+import { send_message } from '../services';
+
 
 
 
 export default function ChatCard() {
     const dispatch = useDispatch()
-    const [message, setMessage] = React.useState('')
-    const user =  useSelector((state : RootState) => state.User.user)
-    const receiver = useSelector((state : RootState) => state.Chat.receiverSelected)
+    const messageContainerRef = useRef<HTMLDivElement>(null);
+    const [sendMessage, setSendMessage] = React.useState('')
+    const user = useSelector((state: RootState) => state.User.user)
+    const receiver = useSelector((state: RootState) => state.Chat.receiverSelected)
+    const messages = useSelector((state: RootState) => state.Chat.messages)
 
-  
-
-    const handleSendMessage = (e : React.FormEvent<HTMLFormElement>) => {
+    const handleSendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        const messageData = {message , sender : user?._id  , receiver : receiver?._id}
-        socket.emit('sendMsg', messageData)
+
+
+
+        if (!sendMessage || !user || !receiver) return toast.error('Please type something');
+        const messageData = { message: sendMessage, senderId: user?._id, receiverId: receiver?._id }
+
+        socket.emit('sendMsg', messageData);
+
+
+        const res = await send_message(messageData);
+        if (res?.success) {
+            toast.success(res?.message)
+        } else {
+            toast.error(res?.message)
+        }
+        setSendMessage("")
     }
 
+
+
     useEffect(() => {
-        const getMessages  = {senderId : user?._id , receiverId : 'xyz'} as unknown as string
-        socket.emit(getMessages)
-        socket.on('getChat', (data) => {
-            console.log(data)
-        })
+        if (messageContainerRef.current) {
+            messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
+        }
+    }, [messages])
+
+
+    useEffect(() => {
+        socket.on('sendMsg', (data) => {
+            dispatch(setMessages(data));
+        });
+
+        return () => {
+            socket.off('sendMsg');
+        };
     }, [])
+
 
     return (
         <>
             <div className='w-full h-20 flex items-center justify-between bg-indigo-600 text-center'>
                 <div className='flex '>
 
-                <div className="avatar mx-4 placeholder">
-                    <div className="bg-neutral-focus text-neutral-content rounded-full w-8">
-                        <span className="text-xs">AA</span>
+                    <div className="avatar mx-4 placeholder">
+                        <div className="bg-neutral-focus text-neutral-content rounded-full w-8">
+                            <span className="text-xs">AA</span>
+                        </div>
                     </div>
-                </div>
 
-                <h1 className='text-white/90 font-semibold tracking-widest '>Abdullah moiz</h1>
+                    <h1 className='text-white/90 font-semibold tracking-widest '>{receiver?.name}</h1>
                 </div>
 
                 <button onClick={() => dispatch(setChatSelected(false))} className='btn btn-circle mx-4'><RxCross2 className="text-2xl" /></button>
@@ -50,29 +79,29 @@ export default function ChatCard() {
 
 
 
-            <div className='w-full h-full px-4 py-2 overflow-y-auto'>
+            <div ref={messageContainerRef} className='w-full h-full px-4 py-2 overflow-y-auto'>
 
-                <div className="chat chat-end">
-                    <div className="chat-image avatar">
-                        <div className="w-10 rounded-full">
-                            <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?cs=srgb&dl=pexels-pixabay-220453.jpg&fm=jpg" />
-                        </div>
-                    </div>
-                    <div className="chat-bubble">It was you who would bring balance to the Force</div>
-                </div>
-                <div className="chat chat-start">
-                    <div className="chat-image avatar">
-                        <div className="w-10 rounded-full">
-                            <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?cs=srgb&dl=pexels-pixabay-220453.jpg&fm=jpg" />
-                        </div>
-                    </div>
-                    <div className="chat-bubble">Not leave it in Darkness</div>
-                </div>
+                {
+                    messages.map((message, i) => {
+                        return (
+                            <div key={i} className={`chat ${message.sender === user?._id ? 'chat-end' : 'chat-start'}`}>
+                                <div className="chat-image avatar">
+                                    <div className="w-10 rounded-full">
+                                        <span>{message.sender === user?._id ? "You" : "Other"}</span>
+                                    </div>
+                                </div>
+                                <div className="chat-bubble">{message.message}</div>
+                            </div>
+                        )
+                    })
+                }
+
+
 
             </div>
 
             <form onSubmit={handleSendMessage} className='h-20 flex items-center justify-start px-4'>
-                <input onChange={(e) => setMessage(e.target.value)} type="text" placeholder="Type here" className="input input-bordered w-full max-w-full" />
+                <input value={sendMessage} onChange={(e) => setSendMessage(e.target.value)} type="text" placeholder="Type here" className="input input-bordered w-full max-w-full" />
                 <button type='submit' className='btn btn-circle btn-primary mx-3'><AiOutlineSend className="text-xl" /></button>
             </form>
         </>

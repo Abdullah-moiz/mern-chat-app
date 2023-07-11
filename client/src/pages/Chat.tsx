@@ -5,18 +5,20 @@ import { useNavigate } from 'react-router-dom'
 import ConversationCard from '../components/ConversationCard';
 import ChatCard from '../components/ChatCard';
 import DummyChatCard from '../components/DummyChatCard';
-import { socket } from '../App';
-import { setAllUserData } from '../slices/chatSlice';
+import { setAllUserData, setMessages } from '../slices/chatSlice';
+import { getChatData, get_all_users } from '../services';
+import { toast, ToastContainer } from 'react-toastify';
 
 
 
 
 export default function Chat() {
     const navigate = useNavigate();
-    const dispatch  = useDispatch();
+    const dispatch = useDispatch();
     const chatSelected = useSelector((state: RootState) => state.Chat.chatSelected)
     const token = useSelector((state: RootState) => state.User.token)
     const userData = useSelector((state: RootState) => state.User.user)
+    const receiver = useSelector((state: RootState) => state.Chat.receiverSelected)
     const allUsers = useSelector((state: RootState) => state.Chat.allUsers)
 
     useEffect(() => {
@@ -24,20 +26,40 @@ export default function Chat() {
             navigate('/')
         }
     }, [token, userData])
-    
+
+
+    const getDataOfAllUsers = async () => {
+        const res = await get_all_users(userData?._id);
+        if (res?.success) {
+            dispatch(setAllUserData(res?.data))
+        } else {
+            toast.error(res?.message)
+        }
+    }
 
     useEffect(() => {
-        if(userData) socket.emit('getAllUsers', userData?._id)
-        socket.on('getAllUsers', (data) => {
-            console.log(data)
-            dispatch(setAllUserData(data))
-        })
-        return () => {
-            socket.off('getAllUsers')
-        }
-    },[])
+        getDataOfAllUsers()
+    }, [])
 
-   
+    useEffect(() => {
+        getChat()
+    },[chatSelected , receiver])
+
+
+    const getChat = async () => {
+
+        const getMessages = { senderId: userData?._id, receiverId: receiver?._id } as unknown as string
+        const res = await getChatData(getMessages);
+        if (res?.success) {
+            dispatch(setMessages(res?.data))
+        } else {
+            toast.error(res?.message)
+        }
+
+    }
+
+
+
 
     return (
         <div className='w-full  min-h-screen bg-gray-100 flex items-center justify-center'>
@@ -50,12 +72,12 @@ export default function Chat() {
                     <div className={`  w-full h-full  overflow-y-auto   overflow-x-hidden py-2`}>
 
                         {
-                            allUsers?.map((user) => {
-                                
-                                return <ConversationCard key={user._id } _id={user._id} name={user.name} email={user.email} phone={user.phone}  />
+                            allUsers?.map((user, index) => {
+
+                                return <ConversationCard key={user?._id+index} _id={user._id} name={user.name} email={user.email} phone={user.phone} />
                             })
                         }
-                        
+
 
 
                     </div>
@@ -77,6 +99,7 @@ export default function Chat() {
                 </div>
 
             </div>
+            <ToastContainer />
         </div>
     )
 }

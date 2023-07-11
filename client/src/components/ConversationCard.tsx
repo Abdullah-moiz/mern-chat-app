@@ -6,7 +6,6 @@ import { userData } from '../types'
 
 export default function ConversationCard({_id , name , email } : userData) {
     const dispatch = useDispatch()
-    console.log(name , email , _id)
     const handleClick = () => {
         dispatch(setChatSelected(true))
         dispatch(setReceiverSelected({_id, name, email}))

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { RegisterFormValues } from '../types';
 import { useForm, SubmitHandler } from "react-hook-form";
 import { register_user } from '../services';
@@ -10,6 +10,7 @@ import { register_user } from '../services';
 
 export default function Register() {
     const [loader, setLoader] = useState(false)
+    const navigate =  useNavigate()
 
 
     const { register, formState: { errors }, handleSubmit } = useForm<RegisterFormValues>({
@@ -23,7 +24,9 @@ export default function Register() {
         if (res?.success) {
             toast.success(res?.message)
             setLoader(false)
-            console.log(res?.data)
+            setTimeout(() => {
+                navigate('/')
+            }, 700);
         } else {
             setLoader(false)
             toast.error(res?.message)
