@@ -7,6 +7,7 @@ import ChatCard from '../components/ChatCard';
 import DummyChatCard from '../components/DummyChatCard';
 import { setAllUserData, setMessages } from '../slices/chatSlice';
 import { getChatData, get_all_users } from '../services';
+import { FaUserGroup } from 'react-icons/fa6';
 import { toast, ToastContainer } from 'react-toastify';
 
 
@@ -61,11 +62,12 @@ export default function Chat() {
 
     return (
         <div className='w-full  min-h-screen bg-gray-100 flex items-center justify-center'>
+
             <div className='lg:w-10/12 mx-2 w-full h-[600px]  flex '>
 
-                <div className={`lg:flex ${chatSelected ? "hidden" : "flex"} w-full lg:w-4/12 h-full   flex-col`}>
+                <div className={`lg:flex ${chatSelected ? "hidden" : "flex"} w-full lg:w-4/12 h-full border bg-gray-300  flex-col`}>
                     <div className='w-full h-[4.4rem] flex items-center justify-center bg-indigo-600 text-center'>
-                        <h1 className='text-white/90 font-semibold tracking-widest'>Start Conversation</h1>
+                        <button className='text-white/90 btn btn-primary font-semibold tracking-widest flex items-center justify-center'>Create Group <FaUserGroup className=" ml-2 text-2xl" /></button>
                     </div>
                     <div className={`  w-full h-full  overflow-y-auto   overflow-x-hidden py-2`}>
 
@@ -79,6 +81,7 @@ export default function Chat() {
 
 
                     </div>
+                    <button className='btn-'></button>
                 </div>
 
 

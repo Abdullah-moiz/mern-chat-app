@@ -110,7 +110,7 @@ export default function ChatCard() {
 
 
 
-    console.log(typing)
+    
 
     return (
         <>
