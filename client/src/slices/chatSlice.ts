@@ -6,7 +6,7 @@ import { chatState } from '../types'
 const initialState: chatState = {
     chatSelected : false,
     allUsers : [],
-
+    receiverSelected : null ,
 }
 
 export const chatSlice = createSlice({
@@ -18,12 +18,14 @@ export const chatSlice = createSlice({
         },
         setAllUserData : (state, action) => {
             state.allUsers = action.payload
-        }
-
+        },
+        setReceiverSelected : (state, action) => {
+            state.receiverSelected = action.payload
+        },
         
     },
 })
 
-export const { setChatSelected , setAllUserData } = chatSlice.actions
+export const { setChatSelected , setAllUserData , setReceiverSelected } = chatSlice.actions
 const chatReducer = chatSlice.reducer
 export default chatReducer

@@ -1,23 +1,34 @@
 import React , {useEffect} from 'react'
 import { AiOutlineSend } from 'react-icons/ai';
 import { RxCross2 } from 'react-icons/rx';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setChatSelected } from '../slices/chatSlice';
 import { socket } from '../App';
+import { RootState } from '../store/store';
 
 
 
 export default function ChatCard() {
     const dispatch = useDispatch()
     const [message, setMessage] = React.useState('')
+    const user =  useSelector((state : RootState) => state.User.user)
+    const receiver = useSelector((state : RootState) => state.Chat.receiverSelected)
 
   
 
     const handleSendMessage = (e : React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        socket.emit('message', message)
-       
+        const messageData = {message , sender : user?._id  , receiver : receiver?._id}
+        socket.emit('sendMsg', messageData)
     }
+
+    useEffect(() => {
+        const getMessages  = {senderId : user?._id , receiverId : 'xyz'} as unknown as string
+        socket.emit(getMessages)
+        socket.on('getChat', (data) => {
+            console.log(data)
+        })
+    }, [])
 
     return (
         <>

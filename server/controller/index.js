@@ -21,7 +21,7 @@ export const LoginUser = async (req, res) => {
 
         const token = jwt.sign({ id: checkUser._id, email: checkUser.email }, process.env.JWT_SECREAT ?? 'default_secret_dumbScret', { expiresIn: '1d' });
 
-        const finalData = {token , user : {name : checkUser.name , email : checkUser.email , phone : checkUser.phone , id : checkUser._id}}
+        const finalData = {token , user : {name : checkUser.name , email : checkUser.email , phone : checkUser.phone , _id : checkUser._id}}
         return res.json({ success: true, message: "Login Successfull",  finalData})
 
     } catch (error) {

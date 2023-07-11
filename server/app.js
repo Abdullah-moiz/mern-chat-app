@@ -6,7 +6,7 @@ import cors from "cors";
 import dotenv from 'dotenv';
 import { createServer } from "http";
 import { Server } from "socket.io";
-import { getAllUsers } from "./controller/chat.js";
+import Chat from './models/Chat.js'
 import User from "./models/User.js";
 
 dotenv.config();
@@ -44,10 +44,33 @@ mongoose.connect(connectionUrl, { useNewUrlParser: true, useUnifiedTopology: tru
 
 // socket io
 io.on("connection", (socket) => {
+
     socket.on('getAllUsers', async (payload) => {
-        const getUsers = await User.find({ _id: { $ne: payload } }).select('-password');
-        io.emit('getAllUsers', getUsers);
-    })
+        console.log(payload)
+        const getAllUsers = await User.find({ _id: { $ne: payload } }).select('-password');
+        io.emit('getAllUsers', getAllUsers);
+        
+    });
+
+    socket.on('sendMsg', async (payload) => {
+        console.log(payload)
+        const newChat = new Chat(payload);
+        await newChat.save();
+        io.emit('sendMsg', newChat);
+    });
+
+
+    socket.on('getChat', async (payload) => {
+        const { senderId, receiverId } = payload;
+        const getChat = await Chat.find({
+            $or: [
+                { $and: [{ sender: senderId }, { receiver: receiverId }] },
+                { $and: [{ sender: receiverId }, { receiver: senderId }] }
+            ]
+        }).populate('sender').populate('receiver');
+        io.emit('getChat', getChat);
+    });
+
 });
 
 app.use('/api/', OurRouter)

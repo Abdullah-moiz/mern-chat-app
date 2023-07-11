@@ -27,8 +27,9 @@ export default function Chat() {
     
 
     useEffect(() => {
-        if(userData) socket.emit('getAllUsers', userData?.id)
+        if(userData) socket.emit('getAllUsers', userData?._id)
         socket.on('getAllUsers', (data) => {
+            console.log(data)
             dispatch(setAllUserData(data))
         })
         return () => {
@@ -50,7 +51,8 @@ export default function Chat() {
 
                         {
                             allUsers?.map((user) => {
-                                return <ConversationCard key={user.id} id={user.id} name={user.name} email={user.name} phone={user.phone}  />
+                                
+                                return <ConversationCard key={user._id } _id={user._id} name={user.name} email={user.email} phone={user.phone}  />
                             })
                         }
                         
