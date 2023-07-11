@@ -1,7 +1,6 @@
-# mern-chat-app
+###### Chat Application Using MERN STACK & Socket.io
 
 
-- 
 ## Authors
 
 - [Abdullah Moiz](https://www.github.com/Abdullah-moiz)
