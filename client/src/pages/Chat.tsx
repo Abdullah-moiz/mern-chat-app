@@ -10,7 +10,7 @@ import { getChatData, get_all_users } from '../services';
 import { BiSearch } from 'react-icons/bi'
 import { FaUserGroup } from 'react-icons/fa6'
 import { toast, ToastContainer } from 'react-toastify';
-import { MdOutlineGroupAdd, MdGroupAdd } from 'react-icons/md'
+import {  MdGroupAdd } from 'react-icons/md'
 
 
 
@@ -18,7 +18,6 @@ import { MdOutlineGroupAdd, MdGroupAdd } from 'react-icons/md'
 export default function Chat() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const ref = useRef<HTMLDivElement>(null)
     const [showName, setShowName] = useState(false)
     const chatSelected = useSelector((state: RootState) => state.Chat.chatSelected)
     const token = useSelector((state: RootState) => state.User.token)
@@ -63,7 +62,7 @@ export default function Chat() {
 
 
     const useOutsideClick = (callback: () => void) => {
-        const ref = React.useRef<HTMLDivElement>(null);
+        const ref = useRef<HTMLDivElement>(null);
 
         React.useEffect(() => {
             const handleClick = (event: MouseEvent) => {

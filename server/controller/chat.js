@@ -15,6 +15,7 @@ export const getAllUsers = async (req , res) => {
  
 export const getChat =  async (req , res) => {
     const { senderId, receiverId } = req.query;
+    if(!senderId || !receiverId) return res.status(400).json({success : false , message : 'senderId and receiverId are required'})
     try {
         const getChat = await Chat.find({
             $or: [
