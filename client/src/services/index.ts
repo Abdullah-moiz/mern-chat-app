@@ -78,3 +78,34 @@ export const send_message = async (formData: any) => {
         console.log('Error at send message (services) : ', error.message);
     }
 }
+
+
+
+export const create_group  =  async (formData: any) => {
+    try {
+        const res = await fetch(`http://localhost:8000/api/create-group`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
+        const data = await res.json();
+        return data;
+    } catch (error: any) {
+        console.log('Error at create group (services) : ', error.message);
+    }
+}
+
+
+export const get_user_group  = async (id: any) => {
+    try {
+        const res = await fetch(`http://localhost:8000/api/get-user-group?id=${id}`, {
+            method: 'GET',
+        });
+        const data = await res.json();
+        return data;
+    } catch (error: any) {
+        console.log('Error at get_user_group (services) : ', error.message);
+    }
+}

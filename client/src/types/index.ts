@@ -22,6 +22,20 @@ export interface userData {
     name: string;
     phone: string;
     _id: string;
+    members: userData[];
+    admin: userData;
+    messages: message[];
+
+}
+
+export interface groupData {
+    email: string;
+    phone:string;
+    _id: string;
+    name: string;
+    members: userData[];
+    admin: userData;
+    messages: message[];
 }
 
 
@@ -30,6 +44,8 @@ export interface chatState {
     allUsers: userData[];
     receiverSelected: receiverSelected | null;
     messages: message[];
+    searchUsers: userData[];
+    allGroups: groupData[];
 }
 
 export interface receiverSelected{

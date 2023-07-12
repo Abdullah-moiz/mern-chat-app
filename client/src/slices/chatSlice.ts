@@ -8,6 +8,8 @@ const initialState: chatState = {
     allUsers: [],
     receiverSelected: null,
     messages: [],
+    searchUsers : [],
+    allGroups : []
 }
 
 export const chatSlice = createSlice({
@@ -20,6 +22,9 @@ export const chatSlice = createSlice({
         setAllUserData: (state, action) => {
             state.allUsers = action.payload
         },
+        setAllGroups: (state, action) => {
+            state.allGroups = action.payload
+        },
         setReceiverSelected: (state, action) => {
             state.receiverSelected = action.payload
         },
@@ -31,11 +36,18 @@ export const chatSlice = createSlice({
             }else{
                 state.messages = [...state.messages, ...newMessages]
             }
+        },
+        setSearchUser : (state, action) => {
+            state.searchUsers = action.payload
         }
+
+
 
     },
 })
 
-export const { setChatSelected, setAllUserData, setReceiverSelected, setMessages } = chatSlice.actions
+export const { 
+    setChatSelected, setAllUserData, setReceiverSelected, setMessages  , setSearchUser , setAllGroups
+} = chatSlice.actions
 const chatReducer = chatSlice.reducer
 export default chatReducer

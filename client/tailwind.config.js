@@ -8,5 +8,6 @@ export default {
     extend: {},
   },
   plugins: [require("daisyui")],
+  important: true,
 }
 

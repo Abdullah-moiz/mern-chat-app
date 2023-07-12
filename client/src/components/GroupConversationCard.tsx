@@ -1,17 +1,15 @@
 import { useDispatch } from 'react-redux'
-import { setChatSelected, setReceiverSelected } from '../slices/chatSlice'
-import { groupData, userData } from '../types'
+import { groupData } from '../types';
 
+export interface GroupConversationCardProps {
+    group: groupData;
+  }
+  
 
-export interface ConversationCardProps {
-    user: userData;
-}
-
-export default function ConversationCard({ user }: ConversationCardProps) {
+export default function GroupConversationCard({ group }: GroupConversationCardProps) {
     const dispatch = useDispatch()
     const handleClick = () => {
-        dispatch(setChatSelected(true))
-        dispatch(setReceiverSelected(user))
+       
     }
 
 
@@ -19,11 +17,11 @@ export default function ConversationCard({ user }: ConversationCardProps) {
         <div onClick={handleClick} className='w-11/12  h-20 bg-slate-800 my-2 flex items-center cursor-pointer rounded-2xl px-4 mx-4 hover:bg-slate-700 text-white justify-start  transition-all duration-700'>
             <div className="avatar mx-4 placeholder">
                 <div className="bg-neutral-focus text-neutral-content rounded-full w-8">
-                    <span className="text-xs">{user.name.substring(0, 2)}</span>
+                    <span className="text-xs">{group.name.substring(0,2)}</span>
                 </div>
             </div>
 
-            <h1 className='font-semibold tracking-widest '>{user.name}</h1>
+            <h1 className= 'font-semibold tracking-widest '>{group.name}</h1>
         </div>
     )
 }
