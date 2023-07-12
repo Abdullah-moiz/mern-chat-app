@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../store/store'
 import { useNavigate } from 'react-router-dom'
@@ -8,9 +8,9 @@ import DummyChatCard from '../components/DummyChatCard';
 import { setAllUserData, setMessages } from '../slices/chatSlice';
 import { getChatData, get_all_users } from '../services';
 import { BiSearch } from 'react-icons/bi'
-import {FaUserGroup} from 'react-icons/fa6'
+import { FaUserGroup } from 'react-icons/fa6'
 import { toast, ToastContainer } from 'react-toastify';
-import {MdOutlineGroupAdd , MdGroupAdd} from 'react-icons/md'
+import { MdOutlineGroupAdd, MdGroupAdd } from 'react-icons/md'
 
 
 
@@ -18,6 +18,8 @@ import {MdOutlineGroupAdd , MdGroupAdd} from 'react-icons/md'
 export default function Chat() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const ref = useRef<HTMLDivElement>(null)
+    const [showName, setShowName] = useState(false)
     const chatSelected = useSelector((state: RootState) => state.Chat.chatSelected)
     const token = useSelector((state: RootState) => state.User.token)
     const userData = useSelector((state: RootState) => state.User.user)
@@ -60,21 +62,55 @@ export default function Chat() {
     }
 
 
+    const useOutsideClick = (callback: () => void) => {
+        const ref = React.useRef<HTMLDivElement>(null);
 
+        React.useEffect(() => {
+            const handleClick = (event: MouseEvent) => {
+                if (ref.current && !ref.current.contains(event.target as Node)) {
+                    callback();
+                }
+            };
+
+            document.addEventListener('click', handleClick, true);
+
+            return () => {
+                document.removeEventListener('click', handleClick, true);
+            };
+        }, [ref]);
+
+        return ref;
+    };
+
+    const handleClickOutside = () => {
+        setShowName(false);
+    };
+    const showNameRef = useOutsideClick(handleClickOutside);
 
     return (
-        <div className='w-full  min-h-screen bg-gradient-to-bl from-gray-700 via-gray-900 to-black flex items-center justify-center'>
-            <div className='lg:w-10/12 mx-2 w-full h-[600px]  flex  '>
+        <div className='w-full  min-h-screen bg-slate-600 flex items-center justify-center'>
+            <div className='lg:w-10/12 mx-2 w-full h-[600px]  flex relative  '>
 
-                <div className='w-20 h-full bg-slate-800 flex flex-col items-center justify-start py-4 text-white gap-4'>
-                    
-                    <FaUserGroup  className="cursor-pointer my-3 text-xl"/>
-                    <MdGroupAdd className="cursor-pointer my-3 text-xl" />
-                    
+                <div className='w-20 h-full bg-slate-800 rounded-xl flex flex-col   items-center justify-start py-4 text-white gap-4'>
 
-                </div> 
+                    <div onClick={() => setShowName(true)} className="avatar placeholder tooltip tooltip-open tooltip-top">
+                        <div className="bg-neutral-focus text-neutral-content rounded-full w-12">
+                            <span>{userData?.name.substring(0, 2)}</span>
+                        </div>
+                    </div>
+                    {
+                        showName && <div ref={showNameRef} className='absolute z-50  left-16 top-10 text-center min-w-max chat-bubble   bg-slate-900 text-white px-3 py-4'>
+                            <p className='text-xl '>{userData?.name}</p>
+                        </div>
+                    }
 
-                <div className={`lg:flex ${chatSelected ? "hidden" : "flex"} w-full lg:w-4/12 h-full  bg-gray-300  flex-col`}>
+                    <FaUserGroup data-tip="Groups" className="cursor-pointer my-3 text-xl tooltip tooltip-open tooltip-top" />
+                    <MdGroupAdd data-tip="Create Group" className="cursor-pointer my-3 text-xl tooltip tooltip-open tooltip-top" />
+
+
+                </div>
+
+                <div className={`lg:flex ${chatSelected ? "hidden" : "flex"} w-full py-2 lg:w-4/12 h-full   flex-col`}>
                     <div className='w-full h-[4.4rem] flex items-center justify-center  bg-slate-600 text-center'>
                         <div className='w-4/5 rounded-xl flex items-center justify-center bg-slate-800'>
                             < BiSearch className=" text-xl text-white mx-4" />
@@ -108,6 +144,7 @@ export default function Chat() {
 
             </div>
             <ToastContainer />
+            <p className='fixed bottom-2 lg:bottom-5 text-center text-white'>Created By Abdullah Moiz</p>
         </div>
     )
 }
