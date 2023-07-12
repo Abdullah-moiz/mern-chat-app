@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux'
 import { setChatSelected, setReceiverSelected } from '../slices/chatSlice'
-import { groupData, userData } from '../types'
+import { userData } from '../types'
 
 
 export interface ConversationCardProps {
@@ -10,7 +10,7 @@ export interface ConversationCardProps {
 export default function ConversationCard({ user }: ConversationCardProps) {
     const dispatch = useDispatch()
     const handleClick = () => {
-        dispatch(setChatSelected(true))
+        dispatch(setChatSelected('basic'))
         dispatch(setReceiverSelected(user))
     }
 

@@ -40,12 +40,14 @@ export interface groupData {
 
 
 export interface chatState {
-    chatSelected: boolean;
+    chatSelected: string;
+    userMessageLoading: boolean;
     allUsers: userData[];
     receiverSelected: receiverSelected | null;
     messages: message[];
     searchUsers: userData[];
     allGroups: groupData[];
+    groupSelected: groupData | null;
 }
 
 export interface receiverSelected{

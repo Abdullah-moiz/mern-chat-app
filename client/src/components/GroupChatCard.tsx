@@ -11,15 +11,15 @@ import { send_message } from '../services';
 
 
 
-export default function ChatCard() {
+export default function GroupChatCard() {
     const dispatch = useDispatch()
     const [typing, setIsTyping] = useState(false);
     const messageContainerRef = useRef<HTMLDivElement>(null);
     const [sendMessage, setSendMessage] = React.useState('')
     const user = useSelector((state: RootState) => state.User.user)
-    const receiver = useSelector((state: RootState) => state.Chat.receiverSelected)
-    const messages = useSelector((state: RootState) => state.Chat.messages)
-    const loading = useSelector((state: RootState) => state.Chat.userMessageLoading)
+    const receiver = useSelector((state: RootState) => state.Chat.groupSelected)
+    let messages : any = [];
+    
     
 
     const handleSendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -140,11 +140,8 @@ export default function ChatCard() {
 
             <div ref={messageContainerRef} className='w-full bg-slate-600 h-full px-4 py-2 overflow-y-auto'>
 
-
                 {
-                    
-
-                    messages.map((message, i) => {
+                    messages?.map((message : any, i : any) => {
                         const isSender = message.receiver === user?._id;
                         const avatarText = isSender ? "Y" : "O";
                         const chatClass = isSender ? "chat-start" : "chat-end";

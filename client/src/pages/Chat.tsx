@@ -14,6 +14,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import { MdGroupAdd } from 'react-icons/md'
 import { PiChatsFill } from 'react-icons/pi'
 import Select from "react-select";
+import GroupChatCard from '../components/GroupChatCard';
 
 
 export default function Chat() {
@@ -140,7 +141,7 @@ export default function Chat() {
         throttledFilter(e.target.value);
     };
 
-    
+
 
     const selectUsers = allUsers.map((user) => ({ value: user._id, label: user.name }))
 
@@ -252,9 +253,13 @@ export default function Chat() {
 
                 <div className={`${chatSelected ? "flex w-full" : "hidden"} w-8/12 rounded-xl h-full  lg:flex  flex-col`}>
 
-                    {
-                        chatSelected ? <ChatCard /> : <DummyChatCard />
-                    }
+                    {chatSelected === 'basic' ? (
+                        <ChatCard />
+                    ) : chatSelected === 'group' ? (
+                        <GroupChatCard />
+                    ) : (
+                        <DummyChatCard />
+                    )}
 
                 </div>
 

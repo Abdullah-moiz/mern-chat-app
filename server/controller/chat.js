@@ -1,21 +1,22 @@
 import User from "../models/User.js";
 import Chat from "../models/Chat.js";
 import { sendMessageSchemaValidation } from "../validations/index.js";
+import GroupChat from "../models/GroupChat.js";
 
-export const getAllUsers = async (req , res) => {
-    const id =  req.query.id;
+export const getAllUsers = async (req, res) => {
+    const id = req.query.id;
     try {
         const getUsers = await User.find({ _id: { $ne: id } });
-        return res.status(200).json({data : getUsers , success : true});
+        return res.status(200).json({ data: getUsers, success: true });
     } catch (error) {
-        console.log('error in server getAllUsers' , error.message)
-        return res.status(500).json({success : false ,message : 'Something went wrong'})
+        console.log('error in server getAllUsers', error.message)
+        return res.status(500).json({ success: false, message: 'Something went wrong' })
     }
 }
- 
-export const getChat =  async (req , res) => {
+
+export const getChat = async (req, res) => {
     const { senderId, receiverId } = req.query;
-    if(!senderId || !receiverId) return res.status(400).json({success : false , message : 'senderId and receiverId are required'})
+    if (!senderId || !receiverId) return res.status(400).json({ success: false, message: 'senderId and receiverId are required' })
     try {
         const getChat = await Chat.find({
             $or: [
@@ -23,17 +24,17 @@ export const getChat =  async (req , res) => {
                 { $and: [{ sender: receiverId }, { receiver: senderId }] }
             ]
         }).populate('sender').populate('receiver');
-        return res.status(200).json({data : getChat , success : true});
+        return res.status(200).json({ data: getChat, success: true });
     } catch (error) {
-        console.log('error in server getChat' , error.message)
-        return res.status(500).json({success : false ,message : 'Something went wrong'})
+        console.log('error in server getChat', error.message)
+        return res.status(500).json({ success: false, message: 'Something went wrong' })
     }
-   
+
 }
 
 
 
-export const sendMessage = async (req , res) => {
+export const sendMessage = async (req, res) => {
     const { senderId, receiverId, message } = req.body;
     const { error } = sendMessageSchemaValidation.validate({ senderId, receiverId, message });
 
@@ -42,9 +43,48 @@ export const sendMessage = async (req , res) => {
     try {
         const newMessage = new Chat({ sender: senderId, receiver: receiverId, message });
         await newMessage.save();
-        return res.status(200).json({success : true , message : 'Message sent successfully'})
+        return res.status(200).json({ success: true, message: 'Message sent successfully' })
     } catch (error) {
-        console.log('error in server sendMessage' , error.message)
-        return res.status(500).json({success : false ,message : 'Something went wrong'})
+        console.log('error in server sendMessage', error.message)
+        return res.status(500).json({ success: false, message: 'Something went wrong' })
+    }
+}
+
+
+export const createGroup = async (req, res) => {
+    const { name, users, createdBy } = req.body;
+
+
+    if (!name || !users || !createdBy) return res.status(400).json({ success: false, message: 'name , users and createdBy are required' })
+
+    try {
+        const newGroup = new GroupChat({ name, users, createdBy });
+        await newGroup.save();
+        return res.status(200).json({ success: true, message: 'Group created successfully' })
+    } catch (error) {
+        console.log('error in server createGroup', error.message)
+        return res.status(500).json({ success: false, message: 'Something went wrong' })
+
+    }
+}
+
+
+
+export const getAllGroups = async (req, res) => {
+    const id = req.query.id;
+    const query = {
+        $or: [
+            { createdBy: id },
+            { users: id }
+        ]
+    };
+
+    try {
+        const getGroupofThisUser = await GroupChat.find(query).populate('users').select('-password').populate('createdBy');
+        console.log(getGroupofThisUser)
+        return res.status(200).json({ data: getGroupofThisUser, success: true });
+    } catch (error) {
+        console.log('error in server getAllGroups', error.message)
+        return res.status(500).json({ success: false, message: 'Something went wrong' })
     }
 }
