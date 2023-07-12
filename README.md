@@ -35,21 +35,24 @@ To run this project, you will need to add the following environment variables to
 #### Screenshots
 
 ##### Login
-![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/0056809a-20d5-48cd-a119-e49615429df5)
+![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/9e700bc2-cf2b-477a-a744-7fe3273bc13e)
+
 
 ##### Register
-![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/51c8e448-c88a-4a7e-aaf5-32045c72d0cb)
+![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/8425d01c-06f1-4cbb-a254-8f7813c99dfb)
+
 
 ##### Main Page
-![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/fc840de4-5a70-4214-8214-6171f518f0c7)
+![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/1156b73a-732b-467e-a1e1-a1cfb927b6fb)
+
 
 
 ##### Chat with Other users
-![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/1e285977-2e50-455f-9e3d-f1e04d79f9fe)
+![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/5d7192cf-b08f-4f66-a7e2-facaae6630f6)
 
-![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/8f252093-4a08-4f5c-8476-c728e016ed2b)
 
-![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/ad51591d-18ee-43d1-92fa-1c30601cc162)
+
+![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/cadeba09-59b9-44da-ab6f-3d0ee0b23a2f)
 
 
 
@@ -58,7 +61,8 @@ To run this project, you will need to add the following environment variables to
 
 
 ##### Detect Typing
-![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/da86dbec-a7ed-4178-b4d1-9a7c123c1312)
+![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/5063cf11-758e-4a43-8037-60d5fed2c0d3)
+9a7c123c1312)
 
 
   
