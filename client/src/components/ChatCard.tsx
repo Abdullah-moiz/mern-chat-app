@@ -114,7 +114,7 @@ export default function ChatCard() {
 
     return (
         <>
-            <div className='w-full h-20 flex items-center justify-between bg-indigo-600 text-center'>
+            <div className='w-full h-20 flex  items-center justify-between bg-slate-600 text-center'>
                 <div className='flex '>
 
                     <div className="avatar mx-4 placeholder">
@@ -130,21 +130,24 @@ export default function ChatCard() {
                     </div>
                 </div>
 
-                <button onClick={() => dispatch(setChatSelected(false))} className='btn btn-circle mx-4'><RxCross2 className="text-2xl" /></button>
+                <button onClick={() => dispatch(setChatSelected(false))} className='text-white mx-4'><RxCross2 className="text-2xl" /></button>
 
             </div>
 
 
 
-            <div ref={messageContainerRef} className='w-full h-full px-4 py-2 overflow-y-auto'>
+            <div ref={messageContainerRef} className='w-full bg-slate-600 h-full px-4 py-2 overflow-y-auto'>
 
                 {
                     messages.map((message, i) => {
+                        const isSender = message.receiver === user?._id;
+                        const avatarText = isSender ? "Y" : "O";
+                        const chatClass = isSender ? "chat-start" : "chat-end";
                         return (
-                            <div key={i} className={`chat ${message.sender === user?._id ? 'chat-end' : 'chat-start'}`}>
+                            <div key={i} className={`chat  ${chatClass}`}>
                                 <div className="avatar chat-image mx-4 placeholder">
                                     <div className="bg-neutral-focus text-neutral-content rounded-full w-8">
-                                        <span className="text-xs">{message.sender === user?._id ? "Y" : "O"}</span>
+                                        <span className="text-xs">{avatarText}</span>
                                     </div>
                                 </div>
                                 <div className="chat-bubble">{message.message}</div>
@@ -157,8 +160,8 @@ export default function ChatCard() {
 
             </div>
 
-            <form onSubmit={handleSendMessage} className='h-20 flex items-center justify-start px-4'>
-                <input value={sendMessage} onChange={(e) => setSendMessage(e.target.value)} type="text" placeholder="Type here" className="input input-bordered w-full max-w-full" />
+            <form onSubmit={handleSendMessage} className='h-20 bg-slate-600 flex items-center justify-start px-4'>
+                <input value={sendMessage} onChange={(e) => setSendMessage(e.target.value)} type="text" placeholder="Type here" className="input bg-slate-600 text-white input-bordered w-full max-w-full" />
                 <button type='submit' className='btn btn-circle btn-primary mx-3'><AiOutlineSend className="text-xl" /></button>
             </form>
 

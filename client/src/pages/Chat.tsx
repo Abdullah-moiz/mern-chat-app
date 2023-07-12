@@ -7,8 +7,10 @@ import ChatCard from '../components/ChatCard';
 import DummyChatCard from '../components/DummyChatCard';
 import { setAllUserData, setMessages } from '../slices/chatSlice';
 import { getChatData, get_all_users } from '../services';
-import { FaUserGroup } from 'react-icons/fa6';
+import { BiSearch } from 'react-icons/bi'
+import {FaUserGroup} from 'react-icons/fa6'
 import { toast, ToastContainer } from 'react-toastify';
+import {MdOutlineGroupAdd , MdGroupAdd} from 'react-icons/md'
 
 
 
@@ -44,7 +46,7 @@ export default function Chat() {
 
     useEffect(() => {
         getChat()
-    },[chatSelected , receiver])
+    }, [chatSelected, receiver])
 
 
     const getChat = async () => {
@@ -53,7 +55,7 @@ export default function Chat() {
         const res = await getChatData(getMessages);
         if (res?.success) {
             dispatch(setMessages(res?.data))
-        } 
+        }
 
     }
 
@@ -61,20 +63,31 @@ export default function Chat() {
 
 
     return (
-        <div className='w-full  min-h-screen bg-gray-100 flex items-center justify-center'>
+        <div className='w-full  min-h-screen bg-gradient-to-bl from-gray-700 via-gray-900 to-black flex items-center justify-center'>
+            <div className='lg:w-10/12 mx-2 w-full h-[600px]  flex  '>
 
-            <div className='lg:w-10/12 mx-2 w-full h-[600px]  flex '>
+                <div className='w-20 h-full bg-slate-800 flex flex-col items-center justify-start py-4 text-white gap-4'>
+                    
+                    <FaUserGroup  className="cursor-pointer my-3 text-xl"/>
+                    <MdGroupAdd className="cursor-pointer my-3 text-xl" />
+                    
 
-                <div className={`lg:flex ${chatSelected ? "hidden" : "flex"} w-full lg:w-4/12 h-full border bg-gray-300  flex-col`}>
-                    <div className='w-full h-[4.4rem] flex items-center justify-center bg-indigo-600 text-center'>
-                        <button className='text-white/90 btn btn-primary font-semibold tracking-widest flex items-center justify-center'>Create Group <FaUserGroup className=" ml-2 text-2xl" /></button>
+                </div> 
+
+                <div className={`lg:flex ${chatSelected ? "hidden" : "flex"} w-full lg:w-4/12 h-full  bg-gray-300  flex-col`}>
+                    <div className='w-full h-[4.4rem] flex items-center justify-center  bg-slate-600 text-center'>
+                        <div className='w-4/5 rounded-xl flex items-center justify-center bg-slate-800'>
+                            < BiSearch className=" text-xl text-white mx-4" />
+                            <input type="text" placeholder="Search..." className=" px-2 py-3 outline-none bg-transparent border-0 bg-slate-600 text-white  w-full max-w-full " ></input>
+                        </div>
+
                     </div>
-                    <div className={`  w-full h-full  overflow-y-auto   overflow-x-hidden py-2`}>
+                    <div className={`  w-full h-full bg-slate-600  overflow-y-auto   overflow-x-hidden py-2`}>
 
                         {
                             allUsers?.map((user, index) => {
 
-                                return <ConversationCard key={user?._id+index} _id={user._id} name={user.name} email={user.email} phone={user.phone} />
+                                return <ConversationCard key={user?._id + index} _id={user._id} name={user.name} email={user.email} phone={user.phone} />
                             })
                         }
 
@@ -85,17 +98,11 @@ export default function Chat() {
                 </div>
 
 
-                <div className={`${chatSelected ? "flex w-full" : "hidden"} w-8/12  h-full  lg:flex  flex-col`}>
-
+                <div className={`${chatSelected ? "flex w-full" : "hidden"} w-8/12 rounded-xl h-full  lg:flex  flex-col`}>
 
                     {
                         chatSelected ? <ChatCard /> : <DummyChatCard />
                     }
-
-
-
-
-
 
                 </div>
 

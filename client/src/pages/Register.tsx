@@ -35,7 +35,7 @@ export default function Register() {
 
 
     return (
-        <section className=" bg-gray-50 dark:bg-gray-900  w-full h-screen ">
+        <section className=" bg-gradient-to-bl from-gray-700 via-gray-900 to-black dark:bg-gray-900  w-full h-screen ">
             <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto h-full lg:py-0">
                 <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
                     <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -64,7 +64,7 @@ export default function Register() {
                                 {errors.phone && <span className='text-red-500 text-xs mt-2'>This field is required</span>}
                             </div>
                             {
-                                loader ? <button className=" w-full btn btn-primary text-white  font-medium rounded-lg text-sm px-5 py-2.5 text-center "> <span className="loading loading-spinner"></span> Creating Account ! </button> : <button type="submit" className="w-full btn btn-primary text-white  font-medium rounded-lg text-sm px-5 py-2.5 text-center ">Sign Up</button>
+                                loader ? <button className=" w-full btn btn-neutral text-white  font-medium rounded-lg text-sm px-5 py-2.5 text-center "> <span className="loading loading-spinner"></span> Creating Account ! </button> : <button type="submit" className="w-full btn btn-neutral text-white  font-medium rounded-lg text-sm px-5 py-2.5 text-center ">Sign Up</button>
                             }
 
                             <p className="text-sm font-light text-gray-500 dark:text-gray-400">

@@ -51,9 +51,9 @@ export default function Login() {
 
 
     return (
-        <section className="bg-gray-50 dark:bg-gray-900  w-full h-screen ">
+        <section className="bg-gradient-to-bl from-gray-700 via-gray-900 to-black dark:bg-gray-900  w-full h-screen ">
             <div className="flex flex-col items-center justify-center h-full px-6 py-8 mx-auto md:h-screen lg:py-0">
-                <Link to='' className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+                <Link to='' className="flex items-center mb-6 text-2xl font-semibold text-gray-900 text-white">
                     <img className="w-8 h-8 mr-2" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="logo" />
                     Chat App
                 </Link>
@@ -76,19 +76,19 @@ export default function Login() {
                             <div className="flex items-center justify-between">
                                 <div className="flex items-start">
                                     <div className="flex items-center h-5">
-                                        <input id="remember" aria-describedby="remember" type="checkbox" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-indigo-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-indigo-600 dark:ring-offset-gray-800" />
+                                        <input id="remember" aria-describedby="remember" type="checkbox" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-neutral-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-neutral-600 dark:ring-offset-gray-800" />
                                     </div>
                                     <div className="ml-3 text-sm">
                                         <label htmlFor="remember" className="text-gray-500 dark:text-gray-300">Remember me</label>
                                     </div>
                                 </div>
-                                <Link to='' className="text-sm font-medium text-indigo-600 hover:underline dark:text-indigo-500">Forgot password?</Link>
+                                <Link to='' className="text-sm font-medium text-neutral-600 hover:underline dark:text-neutral-500">Forgot password?</Link>
                             </div>
                             {
-                                loader ? <button className=" w-full btn btn-primary text-white  font-medium rounded-lg text-sm px-5 py-2.5 text-center "> <span className="loading loading-spinner"></span> Verifying Credientials ! </button> : <button type="submit" className="w-full btn btn-primary text-white  font-medium rounded-lg text-sm px-5 py-2.5 text-center ">Sign In</button>
+                                loader ? <button className=" w-full btn btn-neutral text-white  font-medium rounded-lg text-sm px-5 py-2.5 text-center "> <span className="loading loading-spinner"></span> Verifying Credientials ! </button> : <button type="submit" className="w-full btn btn-neutral text-white  font-medium rounded-lg text-sm px-5 py-2.5 text-center ">Sign In</button>
                             }
                             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                                Don’t have an account yet? <Link to="/register-account" className="font-medium text-indigo-600 hover:underline dark:text-indigo-500">Sign up</Link>
+                                Don’t have an account yet? <Link to="/register-account" className="font-medium text-neutral-600 hover:underline dark:text-neutral-500">Sign up</Link>
                             </p>
                         </form>
                     </div>
