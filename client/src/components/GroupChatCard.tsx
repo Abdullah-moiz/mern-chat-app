@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react'
 import { AiOutlineSend } from 'react-icons/ai';
 import { RxCross2 } from 'react-icons/rx';
 import { useDispatch, useSelector } from 'react-redux';
-import { setChatSelected, setMessages } from '../slices/chatSlice';
+import { setChatSelected, setMessages, setTyperID, setTyping } from '../slices/chatSlice';
 import { socket } from '../App';
 import { toast } from 'react-toastify';
 import { RootState } from '../store/store';
@@ -21,14 +21,14 @@ export default function GroupChatCard() {
     const messages = useSelector((state: RootState) => state.Chat.messages)
     const uniqueID = `${receiver?.users?.map(user => user?._id).join('-')}-${receiver?.createdBy?._id}`;
 
-    
+
 
     const handleSendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
 
 
-        if (!sendMessage || !user || !receiver ) return toast.error('Please type something');
+        if (!sendMessage || !user || !receiver) return toast.error('Please type something');
         const messageData = { message: sendMessage, senderId: user?._id, groupID: receiver?._id, receiverId: uniqueID }
 
         socket.emit('sendMsg', messageData);
@@ -65,9 +65,9 @@ export default function GroupChatCard() {
     useEffect(() => {
         const handleUserIsTyping = () => {
             if (sendMessage !== '') {
-                socket.emit('userIsTyping', { senderId: user?._id, receiverId: receiver?._id });
+                socket.emit('userIsTyping', { senderId: receiver?._id });
             } else {
-                socket.emit('userStopTyping', { senderId: user?._id, receiverId: receiver?._id });
+                socket.emit('userStopTyping', { senderId: receiver?._id });
             }
         };
 
@@ -82,8 +82,9 @@ export default function GroupChatCard() {
     useEffect(() => {
         const handleTyping = (data: any) => {
             const { senderId } = data;
-            if (senderId !== user?._id && senderId === receiver?._id) {
-                setIsTyping(true);
+            if (senderId === receiver?._id) {
+                dispatch(setTyping(true))
+                dispatch(setTyperID({ senderId }))
             }
         };
 
@@ -128,7 +129,7 @@ export default function GroupChatCard() {
                     <div className='flex flex-col   text-left py-2 '>
                         <h1 className='text-white/90 font-semibold tracking-widest text-sm uppercase'>{receiver?.name}</h1>
                         {
-                            typing && <p className='text-xs text-white tracking-widest font-semibold'>Typing...</p>
+                            typing && <p className='text-xs text-white tracking-widest font-semibold'>Someone Typing...</p>
                         }
                     </div>
                 </div>

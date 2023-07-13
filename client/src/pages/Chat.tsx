@@ -69,7 +69,7 @@ export default function Chat() {
     useEffect(() => {
         getDataOfAllUsers()
         getDataOfAllGroupsOFThisUser()
-    }, [])
+    }, [showConversationBox])
 
     useEffect(() => {
         if(showConversationBox === 'basic') {
