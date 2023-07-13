@@ -41,6 +41,7 @@ export interface groupData {
 
 export interface chatState {
     typing: boolean;
+    someOneTyping : boolean;
     typerID: {
         senderId: string;
         receiverId: string;

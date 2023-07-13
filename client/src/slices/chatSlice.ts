@@ -17,6 +17,7 @@ const initialState: chatState = {
     searchUsers : [],
     allGroups : [],
     groupSelected : null,
+    someOneTyping : false
 
 }
 
@@ -59,6 +60,9 @@ export const chatSlice = createSlice({
         },
         setTyperID: (state, action) => {
             state.typerID = action.payload
+        },
+        setSomeoneTyping: (state, action) => {
+            state.someOneTyping = action.payload
         }
         
 
@@ -71,7 +75,7 @@ export const chatSlice = createSlice({
 export const { 
     setChatSelected, setAllUserData, setReceiverSelected,setUserMessageLoading,
      setMessages  , setSearchUser , setAllGroups , setGroupSelected ,setTyping,
-     setTyperID
+     setTyperID , setSomeoneTyping
 } = chatSlice.actions
 const chatReducer = chatSlice.reducer
 export default chatReducer

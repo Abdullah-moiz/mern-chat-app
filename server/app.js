@@ -50,11 +50,13 @@ io.on("connection", (socket) => {
 
     socket.on('userIsTyping', async (payload) => {
         const { senderId, receiverId } = payload;
+        console.log(payload)
         io.emit('userIsTyping', { senderId, receiverId });
     })
 
     socket.on('userStopTyping', async (payload) => {
         const { senderId, receiverId } = payload;
+        console.log(payload)
         io.emit('userStopTyping', { senderId, receiverId });
     })
 });

@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react'
 import { AiOutlineSend } from 'react-icons/ai';
 import { RxCross2 } from 'react-icons/rx';
 import { useDispatch, useSelector } from 'react-redux';
-import { setChatSelected, setMessages, setTyperID, setTyping } from '../slices/chatSlice';
+import { setChatSelected, setMessages, setSomeoneTyping, } from '../slices/chatSlice';
 import { socket } from '../App';
 import { toast } from 'react-toastify';
 import { RootState } from '../store/store';
@@ -13,14 +13,27 @@ import { send_message } from '../services';
 
 export default function ChatCard() {
     const dispatch = useDispatch()
-    const typing = useSelector((state: RootState) => state.Chat.typing)
+    const typingOn = useSelector((state: any) => state.Chat.typing)
+    const TyperID = useSelector((state: any) => state.Chat.typerID)
+    const [typing, setTyping] = React.useState(false)
     const messageContainerRef = useRef<HTMLDivElement>(null);
     const [sendMessage, setSendMessage] = React.useState('')
     const user = useSelector((state: RootState) => state.User.user)
     const receiver = useSelector((state: RootState) => state.Chat.receiverSelected)
     const messages = useSelector((state: RootState) => state.Chat.messages)
-    
-    
+
+
+    React.useEffect(() => {
+        (TyperID?.senderId !== user?._id && TyperID?.receiverId === user?._id && typingOn) ? setTyping(true) : setTyping(false);
+    }, [TyperID, typingOn])
+
+    useEffect(() => {
+        if (sendMessage !== '') {
+            dispatch(setSomeoneTyping(true));
+        } else {
+            dispatch(setSomeoneTyping(false));
+        }
+    }, [sendMessage])
 
     const handleSendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -61,59 +74,6 @@ export default function ChatCard() {
         };
     }, [])
 
-    useEffect(() => {
-        const handleUserIsTyping = () => {
-            if (sendMessage !== '') {
-                socket.emit('userIsTyping', { senderId: user?._id, receiverId: receiver?._id });
-            } else {
-                socket.emit('userStopTyping', { senderId: user?._id, receiverId: receiver?._id });
-            }
-        };
-
-        const timeoutId = setTimeout(handleUserIsTyping, 500);
-
-        return () => {
-            clearTimeout(timeoutId);
-        };
-    }, [sendMessage]);
-
-
-    useEffect(() => {
-        const handleTyping = (data: any) => {
-            const { senderId } = data;
-            if (senderId !== user?._id && senderId === receiver?._id) {
-                dispatch(setTyping(true))
-                dispatch(setTyperID({senderId , receiverId: receiver?._id}))
-            }
-        };
-
-        socket.on('userIsTyping', handleTyping);
-
-        return () => {
-            socket.off('userIsTyping', handleTyping);
-        };
-    }, []);
-
-
-    useEffect(() => {
-        const handleUserStopTyping = () => {
-            dispatch(setTyping(false))
-        };
-
-        socket.on('userStopTyping', handleUserStopTyping);
-
-        return () => {
-            socket.off('userStopTyping', handleUserStopTyping);
-        };
-    }, []);
-
-
-
-
-
-
-
-    
 
     return (
         <>

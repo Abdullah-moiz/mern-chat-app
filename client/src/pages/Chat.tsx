@@ -6,7 +6,7 @@ import ConversationCard from '../components/ConversationCard';
 import ChatCard from '../components/ChatCard';
 import DummyChatCard from '../components/DummyChatCard';
 import GroupConversationCard from '../components/GroupConversationCard';
-import { setAllGroups, setAllUserData, setMessages, setUserMessageLoading } from '../slices/chatSlice';
+import { setAllGroups, setAllUserData, setMessages, setTyperID, setTyping, setUserMessageLoading } from '../slices/chatSlice';
 import { create_group, getChatData, getGroupChatData, get_all_users, get_user_group } from '../services';
 import { BiSearch } from 'react-icons/bi'
 import { FaUserGroup } from 'react-icons/fa6'
@@ -16,6 +16,7 @@ import { PiChatsFill } from 'react-icons/pi'
 import Select from "react-select";
 import GroupChatCard from '../components/GroupChatCard';
 import Loading from '../components/Loading';
+import { socket } from '../App';
 
 
 export default function Chat() {
@@ -32,16 +33,19 @@ export default function Chat() {
     const allUsers = useSelector((state: RootState) => state.Chat.allUsers)
     const [createGroup, setCreateGroup] = useState(false)
     const [groupName, setGroupName] = useState('')
+    const someoneTyping = useSelector((state: RootState) => state.Chat.someOneTyping);
     const [selectedGroupUsers, setSelectedGroupUsers] = useState<string[]>([]);
     const allGroups = useSelector((state: RootState) => state.Chat.allGroups)
     const loading = useSelector((state: RootState) => state.Chat.userMessageLoading)
     const uniqueID = `${group?.users?.map(user => user?._id).join('-')}-${group?.createdBy?._id}`;
+    const typingOn = useSelector((state : RootState) => state.Chat.typing)
 
     useEffect(() => {
         if (!token || !userData) {
             navigate('/')
         }
     }, [token, userData])
+
 
 
 
@@ -72,19 +76,20 @@ export default function Chat() {
     }, [showConversationBox])
 
     useEffect(() => {
-        if(showConversationBox === 'basic') {
+        if (showConversationBox === 'basic') {
             getChat();
-        }else if(showConversationBox === 'group'){
+        } else if (showConversationBox === 'group') {
             getGroupChat();
-        }else{
+        } else {
             return
         }
 
-    }, [chatSelected, receiver, group , showConversationBox])
+    }, [chatSelected, receiver, group, showConversationBox])
 
 
     const getChat = async () => {
         dispatch(setUserMessageLoading(true))
+        if (!userData || !receiver) return dispatch(setUserMessageLoading(false));
         const getMessages = { senderId: userData?._id, receiverId: receiver?._id } as unknown as string
         const res = await getChatData(getMessages);
         if (res?.success) {
@@ -98,6 +103,7 @@ export default function Chat() {
 
     const getGroupChat = async () => {
         dispatch(setUserMessageLoading(true))
+        if (uniqueID.includes('undefined')) return dispatch(setUserMessageLoading(false));
         const getMessages = { senderId: userData?._id, receiverId: uniqueID } as unknown as string
         const res = await getGroupChatData(getMessages);
         if (res?.success) {
@@ -200,9 +206,60 @@ export default function Chat() {
     }
 
 
+    useEffect(() => {
+        const handleUserIsTyping = () => {
+            if (someoneTyping) {
+                socket.emit('userIsTyping', { senderId: userData?._id, receiverId: receiver?._id });
+            } else {
+                socket.emit('userStopTyping', { senderId: userData?._id, receiverId: receiver?._id });
+            }
+        };
+
+        const timeoutId = setTimeout(handleUserIsTyping, 500);
+
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, [someoneTyping]);
 
 
 
+    useEffect(() => {
+
+        console.log('i am running')
+
+        const handleTyping = (data: any) => {
+            const { senderId , receiverId } = data;
+            console.log( senderId !== receiver?._id)
+            if ( senderId !== receiver?._id  ) {
+                dispatch(setTyping(true))
+                dispatch(setTyperID({ senderId, receiverId }))
+            }
+        };
+
+        socket.on('userIsTyping', handleTyping);
+
+        return () => {
+            socket.off('userIsTyping', handleTyping);
+        };
+    }, [someoneTyping]);
+
+
+    useEffect(() => {
+        const handleUserStopTyping = () => {
+            dispatch(setTyping(false))
+        };
+
+        socket.on('userStopTyping', handleUserStopTyping);
+
+        return () => {
+            socket.off('userStopTyping', handleUserStopTyping);
+        };
+    }, [someoneTyping]);
+
+
+
+    console.log(typingOn, 'typingOn')
 
     return (
         <div className='w-full  min-h-screen bg-slate-600 flex items-center justify-center'>

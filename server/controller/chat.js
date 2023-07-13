@@ -16,7 +16,6 @@ export const getAllUsers = async (req, res) => {
 
 export const getChat = async (req, res) => {
     const { senderId, receiverId } = req.query;
-    console.log(req.query)
     if (!senderId || !receiverId) return res.status(400).json({ success: false, message: 'senderId and receiverId are required' })
     try {
         const getChat = await Chat.find({
@@ -25,8 +24,6 @@ export const getChat = async (req, res) => {
                 { $and: [{ sender: receiverId }, { receiver: senderId }] }
             ]
         })
-
-        console.log(getChat)
         return res.status(200).json({ data: getChat, success: true });
     } catch (error) {
         console.log('error in server getChat', error.message)
@@ -38,12 +35,9 @@ export const getChat = async (req, res) => {
 
 export const getGroupChat = async (req, res) => {
     const { senderId, receiverId } = req.query;
-    console.log(req.query)
     if (!senderId || !receiverId) return res.status(400).json({ success: false, message: 'senderId and receiverId are required' })
     try {
         const getChat = await Chat.find({receiver: receiverId});
-
-        console.log(getChat)
         return res.status(200).json({ data: getChat, success: true });
     } catch (error) {
         console.log('error in server getChat', error.message)

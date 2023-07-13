@@ -4,6 +4,7 @@ import { userData } from '../types'
 import React from 'react';
 
 
+
 export interface ConversationCardProps {
     user: userData;
 }
@@ -18,14 +19,15 @@ export default function ConversationCard({ user }: ConversationCardProps) {
         dispatch(setReceiverSelected(user))
     }
 
-    React.useEffect(() => {
-        if (typingOn && TyperID?.senderId === user?._id && TyperID?.receiverId === user?._id ) {
-            setTyping(true)
-        }else{
-            setTyping(false)
-        }
-    }, [typingOn , TyperID])
+ 
 
+  
+
+    React.useEffect(() => {
+        (TyperID?.senderId === user._id && TyperID?.receiverId !==  user?._id  && typingOn ) ? setTyping(true) : setTyping(false);
+    }, [TyperID , typingOn])
+
+ 
 
     return (
         <div onClick={handleClick} className='w-11/12 relative h-20 bg-slate-800 my-2 flex items-center cursor-pointer rounded-2xl px-4 mx-4 hover:bg-slate-700 text-white justify-start  transition-all duration-700'>
