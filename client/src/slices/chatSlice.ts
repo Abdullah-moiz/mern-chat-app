@@ -4,6 +4,11 @@ import { chatState } from '../types'
 
 
 const initialState: chatState = {
+    typing: false,
+    typerID : {
+        senderId : '',
+        receiverId : ''
+    },
     userMessageLoading: false,
     chatSelected: '',
     allUsers: [],
@@ -49,7 +54,12 @@ export const chatSlice = createSlice({
         setUserMessageLoading: (state, action) => {
             state.userMessageLoading = action.payload
         },
-
+        setTyping: (state, action) => {
+            state.typing = action.payload
+        },
+        setTyperID: (state, action) => {
+            state.typerID = action.payload
+        }
         
 
 
@@ -59,7 +69,9 @@ export const chatSlice = createSlice({
 })
 
 export const { 
-    setChatSelected, setAllUserData, setReceiverSelected,setUserMessageLoading, setMessages  , setSearchUser , setAllGroups , setGroupSelected
+    setChatSelected, setAllUserData, setReceiverSelected,setUserMessageLoading,
+     setMessages  , setSearchUser , setAllGroups , setGroupSelected ,setTyping,
+     setTyperID
 } = chatSlice.actions
 const chatReducer = chatSlice.reducer
 export default chatReducer

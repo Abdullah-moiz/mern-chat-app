@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react'
 import { AiOutlineSend } from 'react-icons/ai';
 import { RxCross2 } from 'react-icons/rx';
 import { useDispatch, useSelector } from 'react-redux';
-import { setChatSelected, setMessages } from '../slices/chatSlice';
+import { setChatSelected, setMessages, setTyperID, setTyping } from '../slices/chatSlice';
 import { socket } from '../App';
 import { toast } from 'react-toastify';
 import { RootState } from '../store/store';
@@ -13,13 +13,13 @@ import { send_message } from '../services';
 
 export default function ChatCard() {
     const dispatch = useDispatch()
-    const [typing, setIsTyping] = useState(false);
+    const typing = useSelector((state: RootState) => state.Chat.typing)
     const messageContainerRef = useRef<HTMLDivElement>(null);
     const [sendMessage, setSendMessage] = React.useState('')
     const user = useSelector((state: RootState) => state.User.user)
     const receiver = useSelector((state: RootState) => state.Chat.receiverSelected)
     const messages = useSelector((state: RootState) => state.Chat.messages)
-    const loading = useSelector((state: RootState) => state.Chat.userMessageLoading)
+    
     
 
     const handleSendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -82,7 +82,8 @@ export default function ChatCard() {
         const handleTyping = (data: any) => {
             const { senderId } = data;
             if (senderId !== user?._id && senderId === receiver?._id) {
-                setIsTyping(true);
+                dispatch(setTyping(true))
+                dispatch(setTyperID({senderId , receiverId: receiver?._id}))
             }
         };
 
@@ -96,7 +97,7 @@ export default function ChatCard() {
 
     useEffect(() => {
         const handleUserStopTyping = () => {
-            setIsTyping(false);
+            dispatch(setTyping(false))
         };
 
         socket.on('userStopTyping', handleUserStopTyping);
@@ -142,7 +143,7 @@ export default function ChatCard() {
 
 
                 {
-                    
+
 
                     messages.map((message, i) => {
                         const isSender = message.receiver === user?._id;

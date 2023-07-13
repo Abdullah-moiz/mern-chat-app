@@ -1,6 +1,6 @@
 import express from 'express';
 import { LoginUser, RegisterUser } from '../controller/index.js';
-import { getAllUsers, getChat, sendMessage, createGroup, getAllGroups } from '../controller/chat.js';
+import { getAllUsers, getChat, sendMessage, createGroup, getAllGroups, sendGroupMessage, getGroupChat } from '../controller/chat.js';
 const Router = express.Router();
 
 
@@ -13,6 +13,8 @@ Router.post('/send-user-message', sendMessage)
 
 Router.post('/create-group', createGroup)
 Router.get('/get-user-group', getAllGroups)
+Router.post('/send-group-message', sendGroupMessage)
+Router.get('/get-group-chat', getGroupChat)
 
 
 

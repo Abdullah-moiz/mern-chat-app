@@ -22,24 +22,29 @@ export interface userData {
     name: string;
     phone: string;
     _id: string;
-    members: userData[];
-    admin: userData;
+    users: userData[];
+    createdBy: userData;
     messages: message[];
 
 }
 
 export interface groupData {
     email: string;
-    phone:string;
+    phone: string;
     _id: string;
     name: string;
-    members: userData[];
-    admin: userData;
+    users: userData[];
+    createdBy: userData;
     messages: message[];
 }
 
 
 export interface chatState {
+    typing: boolean;
+    typerID: {
+        senderId: string;
+        receiverId: string;
+    } | null;
     chatSelected: string;
     userMessageLoading: boolean;
     allUsers: userData[];
@@ -50,7 +55,7 @@ export interface chatState {
     groupSelected: groupData | null;
 }
 
-export interface receiverSelected{
+export interface receiverSelected {
     email: string;
     name: string;
     _id: string;

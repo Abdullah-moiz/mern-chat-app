@@ -16,6 +16,7 @@ export const getAllUsers = async (req, res) => {
 
 export const getChat = async (req, res) => {
     const { senderId, receiverId } = req.query;
+    console.log(req.query)
     if (!senderId || !receiverId) return res.status(400).json({ success: false, message: 'senderId and receiverId are required' })
     try {
         const getChat = await Chat.find({
@@ -23,7 +24,26 @@ export const getChat = async (req, res) => {
                 { $and: [{ sender: senderId }, { receiver: receiverId }] },
                 { $and: [{ sender: receiverId }, { receiver: senderId }] }
             ]
-        }).populate('sender').populate('receiver');
+        })
+
+        console.log(getChat)
+        return res.status(200).json({ data: getChat, success: true });
+    } catch (error) {
+        console.log('error in server getChat', error.message)
+        return res.status(500).json({ success: false, message: 'Something went wrong' })
+    }
+
+}
+
+
+export const getGroupChat = async (req, res) => {
+    const { senderId, receiverId } = req.query;
+    console.log(req.query)
+    if (!senderId || !receiverId) return res.status(400).json({ success: false, message: 'senderId and receiverId are required' })
+    try {
+        const getChat = await Chat.find({receiver: receiverId});
+
+        console.log(getChat)
         return res.status(200).json({ data: getChat, success: true });
     } catch (error) {
         console.log('error in server getChat', error.message)
@@ -44,6 +64,28 @@ export const sendMessage = async (req, res) => {
         const newMessage = new Chat({ sender: senderId, receiver: receiverId, message });
         await newMessage.save();
         return res.status(200).json({ success: true, message: 'Message sent successfully' })
+    } catch (error) {
+        console.log('error in server sendMessage', error.message)
+        return res.status(500).json({ success: false, message: 'Something went wrong' })
+    }
+}
+
+export const sendGroupMessage = async (req, res) => {
+    const { senderId, receiverId, message, groupID } = req.body;
+    const { error } = sendMessageSchemaValidation.validate({ senderId, receiverId, message });
+
+    if (error) return res.json({ success: false, message: error.details[0].message.replace(/['"]+/g, '') });
+
+    try {
+        const newMessage = new Chat({ sender: senderId, receiver: receiverId, message });
+        await newMessage.save();
+
+        if (newMessage) {
+            const saveInGroup = await GroupChat.findOneAndUpdate({ _id: groupID }, { $push: { messages: newMessage._id } }, { new: true });
+            return res.status(200).json({ success: true, message: 'Message sent successfully' })
+        }
+
+
     } catch (error) {
         console.log('error in server sendMessage', error.message)
         return res.status(500).json({ success: false, message: 'Something went wrong' })
@@ -81,7 +123,6 @@ export const getAllGroups = async (req, res) => {
 
     try {
         const getGroupofThisUser = await GroupChat.find(query).populate('users').select('-password').populate('createdBy');
-        console.log(getGroupofThisUser)
         return res.status(200).json({ data: getGroupofThisUser, success: true });
     } catch (error) {
         console.log('error in server getAllGroups', error.message)

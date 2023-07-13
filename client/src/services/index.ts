@@ -60,6 +60,18 @@ export const getChatData = async (data: any) => {
         console.log('Error at get_all_users (services) : ', error.message);
     }
 }
+export const getGroupChatData = async (data: any) => {
+    const { senderId, receiverId } = data;
+    try {
+        const res = await fetch(`http://localhost:8000/api/get-group-chat?senderId=${senderId}&receiverId=${receiverId}`, {
+            method: 'GET',
+        });
+        const data = await res.json();
+        return data;
+    } catch (error: any) {
+        console.log('Error at get_all_users (services) : ', error.message);
+    }
+}
 
 
 export const send_message = async (formData: any) => {
@@ -108,4 +120,22 @@ export const get_user_group  = async (id: any) => {
     } catch (error: any) {
         console.log('Error at get_user_group (services) : ', error.message);
     }
+}
+
+
+export const send_group_message = async (formData: any) => {
+    
+        try {
+            const res = await fetch(`http://localhost:8000/api/send-group-message`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            const data = await res.json();
+            return data;
+        } catch (error: any) {
+            console.log('Error at send_group_message (services) : ', error.message);
+        }
 }

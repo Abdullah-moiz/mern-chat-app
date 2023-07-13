@@ -1,14 +1,13 @@
 import mongoose from "mongoose";
-const ObjectId = mongoose.Schema.Types.ObjectId
 
 
 const ChatSchema = new mongoose.Schema({
     sender: {
-        type: ObjectId,
+        type: String,
         required: [true, "Please provide a sender"],
     },
     receiver: {
-        type: ObjectId,
+        type: String,
         required: [true, "Please provide a receiver"],
     },
     message: {

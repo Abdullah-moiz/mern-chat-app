@@ -6,8 +6,8 @@ import ConversationCard from '../components/ConversationCard';
 import ChatCard from '../components/ChatCard';
 import DummyChatCard from '../components/DummyChatCard';
 import GroupConversationCard from '../components/GroupConversationCard';
-import { setAllGroups, setAllUserData, setMessages } from '../slices/chatSlice';
-import { create_group, getChatData, get_all_users, get_user_group } from '../services';
+import { setAllGroups, setAllUserData, setMessages, setUserMessageLoading } from '../slices/chatSlice';
+import { create_group, getChatData, getGroupChatData, get_all_users, get_user_group } from '../services';
 import { BiSearch } from 'react-icons/bi'
 import { FaUserGroup } from 'react-icons/fa6'
 import { toast, ToastContainer } from 'react-toastify';
@@ -15,6 +15,7 @@ import { MdGroupAdd } from 'react-icons/md'
 import { PiChatsFill } from 'react-icons/pi'
 import Select from "react-select";
 import GroupChatCard from '../components/GroupChatCard';
+import Loading from '../components/Loading';
 
 
 export default function Chat() {
@@ -27,17 +28,23 @@ export default function Chat() {
     const token = useSelector((state: RootState) => state.User.token)
     const userData = useSelector((state: RootState) => state.User.user)
     const receiver = useSelector((state: RootState) => state.Chat.receiverSelected)
+    const group = useSelector((state: RootState) => state.Chat.groupSelected);
     const allUsers = useSelector((state: RootState) => state.Chat.allUsers)
     const [createGroup, setCreateGroup] = useState(false)
     const [groupName, setGroupName] = useState('')
     const [selectedGroupUsers, setSelectedGroupUsers] = useState<string[]>([]);
     const allGroups = useSelector((state: RootState) => state.Chat.allGroups)
+    const loading = useSelector((state: RootState) => state.Chat.userMessageLoading)
+    const uniqueID = `${group?.users?.map(user => user?._id).join('-')}-${group?.createdBy?._id}`;
 
     useEffect(() => {
         if (!token || !userData) {
             navigate('/')
         }
     }, [token, userData])
+
+
+
 
 
     const getDataOfAllUsers = async () => {
@@ -65,16 +72,39 @@ export default function Chat() {
     }, [])
 
     useEffect(() => {
-        getChat()
-    }, [chatSelected, receiver])
+        if(showConversationBox === 'basic') {
+            getChat();
+        }else if(showConversationBox === 'group'){
+            getGroupChat();
+        }else{
+            return
+        }
+
+    }, [chatSelected, receiver, group , showConversationBox])
 
 
     const getChat = async () => {
-
+        dispatch(setUserMessageLoading(true))
         const getMessages = { senderId: userData?._id, receiverId: receiver?._id } as unknown as string
         const res = await getChatData(getMessages);
         if (res?.success) {
+            dispatch(setUserMessageLoading(false))
             dispatch(setMessages(res?.data))
+        } else {
+            dispatch(setUserMessageLoading(false))
+        }
+
+    }
+
+    const getGroupChat = async () => {
+        dispatch(setUserMessageLoading(true))
+        const getMessages = { senderId: userData?._id, receiverId: uniqueID } as unknown as string
+        const res = await getGroupChatData(getMessages);
+        if (res?.success) {
+            dispatch(setUserMessageLoading(false))
+            dispatch(setMessages(res?.data))
+        } else {
+            dispatch(setUserMessageLoading(false))
         }
 
     }
@@ -149,7 +179,9 @@ export default function Chat() {
 
     const handleCreateGroup = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        dispatch(setUserMessageLoading(true))
         if (groupName === '' || selectedGroupUsers.length === 0) {
+            dispatch(setUserMessageLoading(false))
             toast.error('Please fill all the fields')
             return
         }
@@ -157,9 +189,11 @@ export default function Chat() {
 
         const res = await create_group(finalData);
         if (res?.success) {
+            dispatch(setUserMessageLoading(false))
             toast.success(res?.message)
             setCreateGroup(false)
         } else {
+            dispatch(setUserMessageLoading(false))
             toast.error(res?.message)
         }
 
@@ -172,6 +206,7 @@ export default function Chat() {
 
     return (
         <div className='w-full  min-h-screen bg-slate-600 flex items-center justify-center'>
+            {loading && <Loading />}
             <div className='lg:w-10/12 mx-2 w-full h-[600px]  flex relative  '>
 
                 <div className='w-20 h-full bg-slate-800 rounded-xl flex flex-col   items-center justify-start py-4 text-white gap-4'>

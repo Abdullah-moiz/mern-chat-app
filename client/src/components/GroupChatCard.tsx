@@ -6,7 +6,7 @@ import { setChatSelected, setMessages } from '../slices/chatSlice';
 import { socket } from '../App';
 import { toast } from 'react-toastify';
 import { RootState } from '../store/store';
-import { send_message } from '../services';
+import { send_group_message } from '../services';
 
 
 
@@ -18,8 +18,9 @@ export default function GroupChatCard() {
     const [sendMessage, setSendMessage] = React.useState('')
     const user = useSelector((state: RootState) => state.User.user)
     const receiver = useSelector((state: RootState) => state.Chat.groupSelected)
-    let messages : any = [];
-    
+    const messages = useSelector((state: RootState) => state.Chat.messages)
+    const uniqueID = `${receiver?.users?.map(user => user?._id).join('-')}-${receiver?.createdBy?._id}`;
+
     
 
     const handleSendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -27,13 +28,13 @@ export default function GroupChatCard() {
 
 
 
-        if (!sendMessage || !user || !receiver) return toast.error('Please type something');
-        const messageData = { message: sendMessage, senderId: user?._id, receiverId: receiver?._id }
+        if (!sendMessage || !user || !receiver ) return toast.error('Please type something');
+        const messageData = { message: sendMessage, senderId: user?._id, groupID: receiver?._id, receiverId: uniqueID }
 
         socket.emit('sendMsg', messageData);
 
 
-        const res = await send_message(messageData);
+        const res = await send_group_message(messageData);
         if (res?.success) {
             toast.success(res?.message)
         } else {
@@ -112,7 +113,7 @@ export default function GroupChatCard() {
 
 
 
-    
+
 
     return (
         <>
@@ -141,7 +142,7 @@ export default function GroupChatCard() {
             <div ref={messageContainerRef} className='w-full bg-slate-600 h-full px-4 py-2 overflow-y-auto'>
 
                 {
-                    messages?.map((message : any, i : any) => {
+                    messages?.map((message: any, i: any) => {
                         const isSender = message.receiver === user?._id;
                         const avatarText = isSender ? "Y" : "O";
                         const chatClass = isSender ? "chat-start" : "chat-end";
