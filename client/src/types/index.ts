@@ -13,6 +13,7 @@ export type RegisterFormValues = {
 
 
 export interface userState {
+    themeLight: string;
     token: string;
     user: userData | null;
 }

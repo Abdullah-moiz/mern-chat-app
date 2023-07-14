@@ -4,6 +4,7 @@ import { userState } from '../types'
 
 
 const initialState: userState = {
+    themeLight : 'off',
     token : '',
     user : null
 }
@@ -18,9 +19,12 @@ export const userSlice = createSlice({
         setUserData : (state, action) => {
             state.user = action.payload
         },
+        setTheme : (state, action) => {
+            state.themeLight = action.payload
+        }
     },
 })
 
-export const { setToken , setUserData } = userSlice.actions
+export const { setToken , setUserData  , setTheme} = userSlice.actions
 const userReducer = userSlice.reducer
 export default userReducer

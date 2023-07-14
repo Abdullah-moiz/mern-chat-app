@@ -5,6 +5,7 @@ import GroupChat from "../models/GroupChat.js";
 
 export const getAllUsers = async (req, res) => {
     const id = req.query.id;
+    if(id === 'undefined' ||  !id) return 
     try {
         const getUsers = await User.find({ _id: { $ne: id } });
         return res.status(200).json({ data: getUsers, success: true });
@@ -41,7 +42,7 @@ export const getGroupChat = async (req, res) => {
         const getChat = await Chat.find({receiver: receiverId});
         return res.status(200).json({ data: getChat, success: true });
     } catch (error) {
-        console.log('error in server getChat', error.message)
+        console.log('error in server getGroupChat', error.message)
         return res.status(500).json({ success: false, message: 'Something went wrong' })
     }
 
