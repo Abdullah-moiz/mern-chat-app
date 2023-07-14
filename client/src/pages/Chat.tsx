@@ -18,6 +18,7 @@ import GroupChatCard from '../components/GroupChatCard';
 import Loading from '../components/Loading';
 import { socket } from '../App';
 import { setTheme } from '../slices/userSlice';
+import UserActivityDetector from '../components/UserActivityDetector';
 
 
 export default function Chat() {
@@ -45,6 +46,7 @@ export default function Chat() {
             navigate('/')
         }
     }, [token, userData])
+
 
 
 
@@ -91,7 +93,7 @@ export default function Chat() {
         } else {
             return;
         }
-    }, [receiver, group , userData])
+    }, [receiver, group, userData])
 
 
     const getChat = async () => {
@@ -278,8 +280,12 @@ export default function Chat() {
     }
 
 
+
+
+
     return (
         <div className={`w-full  min-h-screen ${theme === 'on' ? 'bg-gray-50' : "bg-slate-950"} flex items-center justify-center`}>
+            <UserActivityDetector />
 
             <label className={`swap swap-rotate fixed lg:top-5 lg:right-32 right-10 top-3  ${theme === 'on' ? 'text-black' : "text-white"} `}>
 

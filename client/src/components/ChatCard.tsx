@@ -24,7 +24,6 @@ export default function ChatCard() {
     const theme = useSelector((state: RootState) => state.User.themeLight);
 
 
-    console.log(((TyperID?.receiverId === user?._id && TyperID?.senderId !== user?._id  && typingOn ) && (receiver?._id === TyperID?.senderId )) )
     React.useEffect(() => {
         if ((TyperID?.receiverId === user?._id && TyperID?.senderId !== user?._id  && typingOn ) && (receiver?._id === TyperID?.senderId ))  {
             setTyping(true);
@@ -43,8 +42,6 @@ export default function ChatCard() {
 
     const handleSendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-
-
 
         if (!sendMessage || !user || !receiver) return toast.error('Please type something');
         const messageData = { message: sendMessage, senderId: user?._id, receiverId: receiver?._id }

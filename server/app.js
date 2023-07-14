@@ -42,10 +42,20 @@ mongoose.connect(connectionUrl, { useNewUrlParser: true, useUnifiedTopology: tru
 
 
 
+const activeUsers = new Set();
+
 io.on("connection", (socket) => {
 
-  
+    socket.on('userActive', (userId) => {
+        activeUsers.add(userId);
+        io.emit('userStatus', { userId, online: true });
+    });
 
+    // Handle user disconnection
+    socket.on('userInactive', (userId) => {
+        activeUsers.delete(userId);
+        io.emit('userStatus', { userId, online: false });
+    });
     socket.on('sendMsg', async (payload) => {
         io.emit('sendMsg', payload);
     });
