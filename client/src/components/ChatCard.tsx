@@ -22,9 +22,16 @@ export default function ChatCard() {
     const receiver = useSelector((state: RootState) => state.Chat.receiverSelected)
     const messages = useSelector((state: RootState) => state.Chat.messages)
 
+    console.log(receiver?._id)
+    console.log(TyperID?.senderId);
+    console.log(user?._id)
+    console.log(TyperID?.receiverId)
+    console.log(typing)
 
     React.useEffect(() => {
-        (TyperID?.senderId !== user?._id && TyperID?.receiverId === user?._id && typingOn) ? setTyping(true) : setTyping(false);
+       if (TyperID?.receiverId === user?._id  && TyperID?.senderId !== user?._id && typingOn) {
+            setTyping(true)
+        }
     }, [TyperID, typingOn])
 
     useEffect(() => {

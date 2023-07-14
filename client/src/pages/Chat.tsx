@@ -38,7 +38,7 @@ export default function Chat() {
     const allGroups = useSelector((state: RootState) => state.Chat.allGroups)
     const loading = useSelector((state: RootState) => state.Chat.userMessageLoading)
     const uniqueID = `${group?.users?.map(user => user?._id).join('-')}-${group?.createdBy?._id}`;
-    const typingOn = useSelector((state : RootState) => state.Chat.typing)
+    const typingOn = useSelector((state: RootState) => state.Chat.typing)
 
     useEffect(() => {
         if (!token || !userData) {
@@ -69,6 +69,12 @@ export default function Chat() {
         }
 
     }
+
+
+
+
+
+
 
     useEffect(() => {
         getDataOfAllUsers()
@@ -229,9 +235,9 @@ export default function Chat() {
         console.log('i am running')
 
         const handleTyping = (data: any) => {
-            const { senderId , receiverId } = data;
-            console.log( senderId !== receiver?._id)
-            if ( senderId !== receiver?._id  ) {
+            const { senderId, receiverId } = data;
+            console.log(senderId !== receiver?._id)
+            if (senderId !== receiver?._id) {
                 dispatch(setTyping(true))
                 dispatch(setTyperID({ senderId, receiverId }))
             }
@@ -259,7 +265,8 @@ export default function Chat() {
 
 
 
-    console.log(typingOn, 'typingOn')
+    
+
 
     return (
         <div className='w-full  min-h-screen bg-slate-600 flex items-center justify-center'>
@@ -322,7 +329,7 @@ export default function Chat() {
                             showConversationBox === 'basic' ?
                                 <>
                                     {filterItems(searchTerm)?.map((user, index) => (
-                                        <ConversationCard key={user?._id + index} user={user} />
+                                        <ConversationCard key={user?._id + index} user={user}  />
                                     ))}
                                 </>
                                 :

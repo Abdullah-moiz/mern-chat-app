@@ -40,6 +40,7 @@ export interface groupData {
 
 
 export interface chatState {
+    userOnline: boolean;
     typing: boolean;
     someOneTyping : boolean;
     typerID: {

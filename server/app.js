@@ -41,22 +41,22 @@ mongoose.connect(connectionUrl, { useNewUrlParser: true, useUnifiedTopology: tru
     .catch((err) => console.log("Getting Error from DB connection" + err.message))
 
 
-// socket io
+
 io.on("connection", (socket) => {
+
+  
+
     socket.on('sendMsg', async (payload) => {
-        console.log(payload)
         io.emit('sendMsg', payload);
     });
 
     socket.on('userIsTyping', async (payload) => {
         const { senderId, receiverId } = payload;
-        console.log(payload)
         io.emit('userIsTyping', { senderId, receiverId });
     })
 
     socket.on('userStopTyping', async (payload) => {
         const { senderId, receiverId } = payload;
-        console.log(payload)
         io.emit('userStopTyping', { senderId, receiverId });
     })
 });
