@@ -6,7 +6,7 @@ import ConversationCard from '../components/ConversationCard';
 import ChatCard from '../components/ChatCard';
 import DummyChatCard from '../components/DummyChatCard';
 import GroupConversationCard from '../components/GroupConversationCard';
-import { setAllGroups, setAllUserData, setMessages, setTyperID, setTyping, setUserMessageLoading } from '../slices/chatSlice';
+import { setAllGroups, setAllUserData, setGroupMessages, setMessages, setTyperID, setTyping, setUserMessageLoading } from '../slices/chatSlice';
 import { create_group, getChatData, getGroupChatData, get_all_users, get_user_group } from '../services';
 import { BiSearch } from 'react-icons/bi'
 import { FaUserGroup } from 'react-icons/fa6'
@@ -82,15 +82,15 @@ export default function Chat() {
     }, [showConversationBox])
 
     useEffect(() => {
-        if (showConversationBox === 'basic') {
+        if (receiver) {
             getChat();
-        } else if (showConversationBox === 'group') {
+        } else if (group) {
             getGroupChat();
         } else {
             return
         }
 
-    }, [chatSelected, receiver, group, showConversationBox])
+    }, [receiver, group])
 
 
     const getChat = async () => {
@@ -107,19 +107,40 @@ export default function Chat() {
 
     }
 
+    // const getGroupChat = async () => {
+    //     dispatch(setUserMessageLoading(true))
+    //     const uniqueID = `${group?.users?.map(user => user?._id).join('-')}-${group?.createdBy?._id}`;
+    //     if (!uniqueID) return dispatch(setUserMessageLoading(false));
+    //     const getMessages = { senderId: userData?._id, receiverId: uniqueID } as unknown as string
+    //     const res = await getGroupChatData(getMessages);
+    //     console.log(res)
+    //     if (res?.success) {
+    //         dispatch(setMessages(res?.data))
+    //         dispatch(setUserMessageLoading(false))
+    //     } else {
+    //         dispatch(setUserMessageLoading(false))
+    //     }
+
+    // }
+
     const getGroupChat = async () => {
-        dispatch(setUserMessageLoading(true))
-        if (uniqueID.includes('undefined')) return dispatch(setUserMessageLoading(false));
-        const getMessages = { senderId: userData?._id, receiverId: uniqueID } as unknown as string
-        const res = await getGroupChatData(getMessages);
-        if (res?.success) {
-            dispatch(setUserMessageLoading(false))
-            dispatch(setMessages(res?.data))
-        } else {
-            dispatch(setUserMessageLoading(false))
+        dispatch(setUserMessageLoading(true));
+        const uniqueID = `${group?.users?.map(user => user?._id).join('-')}-${group?.createdBy?._id}`;
+        if (!uniqueID) return dispatch(setUserMessageLoading(false));
+
+        if (group) {
+            dispatch(setGroupMessages({ groupId: group?._id, messages: [] }));
         }
 
-    }
+        const getMessages = { senderId: userData?._id, receiverId: uniqueID } as unknown as string;
+        const res = await getGroupChatData(getMessages);
+        if (res?.success) {
+            dispatch(setGroupMessages({ groupId: group?._id, messages: res?.data }));
+            dispatch(setUserMessageLoading(false));
+        } else {
+            dispatch(setUserMessageLoading(false));
+        }
+    };
 
 
     const useOutsideClick = (callback: () => void) => {
@@ -197,6 +218,7 @@ export default function Chat() {
             toast.error('Please fill all the fields')
             return
         }
+
         const finalData = { name: groupName, users: selectedGroupUsers, createdBy: userData?._id }
 
         const res = await create_group(finalData);
@@ -231,12 +253,8 @@ export default function Chat() {
 
 
     useEffect(() => {
-
-        console.log('i am running')
-
         const handleTyping = (data: any) => {
             const { senderId, receiverId } = data;
-            console.log(senderId !== receiver?._id)
             if (senderId !== receiver?._id) {
                 dispatch(setTyping(true))
                 dispatch(setTyperID({ senderId, receiverId }))
@@ -265,13 +283,13 @@ export default function Chat() {
 
 
 
-    
+
 
 
     return (
-        <div className='w-full  min-h-screen bg-slate-600 flex items-center justify-center'>
+        <div className='w-full  min-h-screen bg-slate-950 flex items-center justify-center'>
             {loading && <Loading />}
-            <div className='lg:w-10/12 mx-2 w-full h-[600px]  flex relative  '>
+            <div className='lg:w-10/12 mx-2 w-full h-[600px] shadow bg-gray-600 rounded-xl flex relative  '>
 
                 <div className='w-20 h-full bg-slate-800 rounded-xl flex flex-col   items-center justify-start py-4 text-white gap-4'>
 
@@ -329,7 +347,7 @@ export default function Chat() {
                             showConversationBox === 'basic' ?
                                 <>
                                     {filterItems(searchTerm)?.map((user, index) => (
-                                        <ConversationCard key={user?._id + index} user={user}  />
+                                        <ConversationCard key={user?._id + index} user={user} />
                                     ))}
                                 </>
                                 :

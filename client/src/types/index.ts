@@ -40,6 +40,7 @@ export interface groupData {
 
 
 export interface chatState {
+    groupMessages: Record<string, groupMessges>;
     userOnline: boolean;
     typing: boolean;
     someOneTyping : boolean;
@@ -55,6 +56,11 @@ export interface chatState {
     searchUsers: userData[];
     allGroups: groupData[];
     groupSelected: groupData | null;
+}
+
+export interface groupMessges {
+    groupId: string;
+    messages: message[];
 }
 
 export interface receiverSelected {

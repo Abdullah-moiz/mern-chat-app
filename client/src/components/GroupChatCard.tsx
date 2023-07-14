@@ -2,11 +2,15 @@ import React, { useRef, useEffect, useState } from 'react'
 import { AiOutlineSend } from 'react-icons/ai';
 import { RxCross2 } from 'react-icons/rx';
 import { useDispatch, useSelector } from 'react-redux';
-import { setChatSelected, setMessages, setTyperID, setTyping } from '../slices/chatSlice';
+import { setChatSelected, setGroupMessages, setMessages, setTyperID, setTyping } from '../slices/chatSlice';
 import { socket } from '../App';
 import { toast } from 'react-toastify';
 import { RootState } from '../store/store';
 import { send_group_message } from '../services';
+import { createSelector } from '@reduxjs/toolkit';
+import { groupMessges, receiverSelected } from '../types';
+
+
 
 
 
@@ -18,7 +22,19 @@ export default function GroupChatCard() {
     const [sendMessage, setSendMessage] = React.useState('')
     const user = useSelector((state: RootState) => state.User.user)
     const receiver = useSelector((state: RootState) => state.Chat.groupSelected)
-    const messages = useSelector((state: RootState) => state.Chat.messages)
+    const getGroupMessages = createSelector(
+        (state: RootState) => state.Chat.groupMessages,
+        (_: unknown, receiver: receiverSelected | null) => receiver?._id ?? '',
+        (groupMessages: Record<string, groupMessges>, groupId: string) => {
+            if (groupId && groupMessages[groupId]) {
+                const messages = groupMessages[groupId].messages;
+                return Array.isArray(messages) ? messages : [];
+            }
+            return [];
+        }
+    );
+
+    const messages = useSelector((state: RootState) => getGroupMessages(state, receiver));
     const uniqueID = `${receiver?.users?.map(user => user?._id).join('-')}-${receiver?.createdBy?._id}`;
 
 
@@ -33,6 +49,7 @@ export default function GroupChatCard() {
 
         socket.emit('sendMsg', messageData);
 
+        dispatch(setGroupMessages({ groupId: receiver?._id, messages: [messageData] }));
 
         const res = await send_group_message(messageData);
         if (res?.success) {
@@ -51,16 +68,29 @@ export default function GroupChatCard() {
         }
     }, [messages])
 
-
     useEffect(() => {
         socket.on('sendMsg', (data) => {
-            dispatch(setMessages(data));
+            if (data.groupID === receiver?._id) {
+                const { groupId, messages } = data;
+                const existingMessages = messages?.filter((message :any , state:RootState) =>
+                    !state.Chat.groupMessages[groupId]?.messages.some((existingMessage) =>
+                        existingMessage._id === message._id
+                    )
+                );
+                if (existingMessages?.length > 0) {
+                    dispatch(setGroupMessages({ groupId, messages: existingMessages }));
+                }
+            }
         });
 
         return () => {
             socket.off('sendMsg');
         };
-    }, [])
+    }, [receiver]);
+
+
+
+
 
     useEffect(() => {
         const handleUserIsTyping = () => {
@@ -144,7 +174,7 @@ export default function GroupChatCard() {
 
                 {
                     messages?.map((message: any, i: any) => {
-                        const isSender = message.receiver === user?._id;
+                        const isSender = message?.receiver === user?._id;
                         const avatarText = isSender ? "Y" : "O";
                         const chatClass = isSender ? "chat-start" : "chat-end";
                         return (

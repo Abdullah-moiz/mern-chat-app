@@ -35,6 +35,7 @@ export const getChat = async (req, res) => {
 
 export const getGroupChat = async (req, res) => {
     const { senderId, receiverId } = req.query;
+    console.log('senderId, receiverId', senderId, receiverId)
     if (!senderId || !receiverId) return res.status(400).json({ success: false, message: 'senderId and receiverId are required' })
     try {
         const getChat = await Chat.find({receiver: receiverId});

@@ -4,21 +4,22 @@ import { chatState } from '../types'
 
 
 const initialState: chatState = {
-    userOnline : false,
+    userOnline: false,
     typing: false,
-    typerID : {
-        senderId : '',
-        receiverId : ''
+    typerID: {
+        senderId: '',
+        receiverId: ''
     },
     userMessageLoading: false,
     chatSelected: '',
     allUsers: [],
     receiverSelected: null,
     messages: [],
-    searchUsers : [],
-    allGroups : [],
-    groupSelected : null,
-    someOneTyping : false
+    searchUsers: [],
+    allGroups: [],
+    groupSelected: null,
+    someOneTyping: false,
+    groupMessages: {},
 
 }
 
@@ -40,17 +41,17 @@ export const chatSlice = createSlice({
         },
         setMessages: (state, action) => {
             const newMessages = Array.isArray(action.payload) ? action.payload : [action.payload]
-            if(newMessages.length === 0){
+            if (newMessages.length === 0) {
                 state.messages = []
                 return
-            }else{
+            } else {
                 state.messages = [...state.messages, ...newMessages]
             }
         },
-        setSearchUser : (state, action) => {
+        setSearchUser: (state, action) => {
             state.searchUsers = action.payload
         },
-        setGroupSelected : (state, action) => {
+        setGroupSelected: (state, action) => {
             state.groupSelected = action.payload
         },
         setUserMessageLoading: (state, action) => {
@@ -67,19 +68,37 @@ export const chatSlice = createSlice({
         },
         setUserIsOnline: (state, action) => {
             state.userOnline = action.payload
+        },
+        setGroupMessages: (state, action) => {
+            const { groupId, messages } = action.payload;
+            if (Array.isArray(messages)) {
+                if (state.groupMessages[groupId]) {
+                    state.groupMessages[groupId].messages.push(...messages);
+                } else {
+                    state.groupMessages[groupId] = {
+                        groupId,
+                        messages: [...messages]
+                    };
+                }
+            } else {
+                if (state.groupMessages[groupId]) {
+                    state.groupMessages[groupId].messages.push(messages);
+                } else {
+                    state.groupMessages[groupId] = {
+                        groupId,
+                        messages: [messages]
+                    };
+                }
+            }
         }
-        
-
-
-
 
     },
 })
 
-export const { 
-    setChatSelected, setAllUserData, setReceiverSelected,setUserMessageLoading,
-     setMessages  , setSearchUser , setAllGroups , setGroupSelected ,setTyping,
-     setTyperID , setSomeoneTyping , setUserIsOnline
+export const {
+    setChatSelected, setAllUserData, setReceiverSelected, setUserMessageLoading,
+    setMessages, setSearchUser, setAllGroups, setGroupSelected, setTyping,
+    setTyperID, setSomeoneTyping, setUserIsOnline, setGroupMessages
 } = chatSlice.actions
 const chatReducer = chatSlice.reducer
 export default chatReducer

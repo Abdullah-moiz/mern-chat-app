@@ -21,8 +21,6 @@ export default function ConversationCard({ user }: ConversationCardProps, online
     const isUserOnline = onlineUsers[user._id];
 
 
-    console.log(isUserOnline)
-
     React.useEffect(() => {
         (TyperID?.senderId === user._id && TyperID?.receiverId !== user?._id && typingOn) ? setTyping(true) : setTyping(false);
     }, [TyperID, typingOn])
