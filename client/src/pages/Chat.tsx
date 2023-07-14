@@ -13,13 +13,18 @@ import { FaUserGroup } from 'react-icons/fa6'
 import { toast, ToastContainer } from 'react-toastify';
 import { MdGroupAdd } from 'react-icons/md'
 import { PiChatsFill } from 'react-icons/pi'
-import Select from "react-select";
+import Select   from "react-select";
 import GroupChatCard from '../components/GroupChatCard';
 import Loading from '../components/Loading';
 import { socket } from '../App';
 import { setTheme } from '../slices/userSlice';
 import UserActivityDetector from '../components/UserActivityDetector';
 
+interface CustomOptionType {
+    value: string;
+    label: string;
+  }
+  
 
 export default function Chat() {
     const navigate = useNavigate();
@@ -194,7 +199,7 @@ export default function Chat() {
 
 
 
-    const selectUsers = allUsers.map((user) => ({ value: user._id, label: user.name }))
+    const selectUsers : any = allUsers.map((user) => ({ value: user._id, label: user.name }))
 
 
 
