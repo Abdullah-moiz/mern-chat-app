@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { AiOutlineSend } from 'react-icons/ai';
 import { RxCross2 } from 'react-icons/rx';
 import { useDispatch, useSelector } from 'react-redux';

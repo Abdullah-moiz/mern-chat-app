@@ -20,11 +20,6 @@ import { socket } from '../App';
 import { setTheme } from '../slices/userSlice';
 import UserActivityDetector from '../components/UserActivityDetector';
 
-interface CustomOptionType {
-    value: string;
-    label: string;
-  }
-  
 
 export default function Chat() {
     const navigate = useNavigate();
