@@ -15,6 +15,7 @@ export default function ConversationCard({ user }: ConversationCardProps) {
     const typingOn = useSelector((state: any) => state.Chat.typing)
     const TyperID = useSelector((state: any) => state.Chat.typerID)
     const theme = useSelector((state: RootState) => state.User.themeLight)
+    const loggedInUser = useSelector((state : RootState) => state.User.user)
     const [typing, setTyping] = React.useState(false)
     const handleClick = () => {
         dispatch(setChatSelected('basic'))
@@ -22,9 +23,8 @@ export default function ConversationCard({ user }: ConversationCardProps) {
     }
 
 
-
     React.useEffect(() => {
-        (TyperID?.senderId === user._id && TyperID?.receiverId !== user?._id && typingOn) ? setTyping(true) : setTyping(false);
+        (( TyperID?.senderId === user._id && TyperID?.receiverId !== user?._id && loggedInUser?._id === TyperID?.receiverId && typingOn) )? setTyping(true) : setTyping(false);
     }, [TyperID, typingOn])
 
 

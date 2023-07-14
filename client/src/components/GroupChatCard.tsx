@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react'
 import { AiOutlineSend } from 'react-icons/ai';
 import { RxCross2 } from 'react-icons/rx';
 import { useDispatch, useSelector } from 'react-redux';
-import { setChatSelected, setGroupMessages, setMessages, setTyperID, setTyping } from '../slices/chatSlice';
+import { setChatSelected, setGroupMessages,  setTyperID, setTyping } from '../slices/chatSlice';
 import { socket } from '../App';
 import { toast } from 'react-toastify';
 import { RootState } from '../store/store';
@@ -70,16 +70,12 @@ export default function GroupChatCard() {
 
     useEffect(() => {
         socket.on('sendMsg', (data) => {
+            
             if (data.groupID === receiver?._id) {
-                const { groupId, messages } = data;
-                const existingMessages = messages?.filter((message :any , state:RootState) =>
-                    !state.Chat.groupMessages[groupId]?.messages.some((existingMessage) =>
-                        existingMessage._id === message._id
-                    )
-                );
-                if (existingMessages?.length > 0) {
-                    dispatch(setGroupMessages({ groupId, messages: existingMessages }));
-                }
+                
+                const { groupID } = data;
+
+                dispatch(setGroupMessages({ groupId: groupID, messages: [data] }));
             }
         });
 

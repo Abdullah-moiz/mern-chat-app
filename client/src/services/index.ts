@@ -62,7 +62,6 @@ export const getChatData = async (data: any) => {
 }
 export const getGroupChatData = async (data: any) => {
     const { senderId, receiverId } = data;
-    console.log('senderId : ', senderId, 'receiverId : ', receiverId)
     try {
         const res = await fetch(`http://localhost:8000/api/get-group-chat?senderId=${senderId}&receiverId=${receiverId}`, {
             method: 'GET',

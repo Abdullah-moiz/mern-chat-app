@@ -85,14 +85,13 @@ export default function Chat() {
 
 
     useEffect(() => {
-        if (receiver) {
+        if (receiver && Object.keys(receiver).length > 0 || group && Object.keys(group).length > 0) {
             getChat();
-        } else if (group) {
-            getGroupChat();
+            getGroupChat()
         } else {
-            return
+            return;
         }
-    }, [receiver, group])
+    }, [receiver, group , userData])
 
 
     const getChat = async () => {

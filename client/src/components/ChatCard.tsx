@@ -24,15 +24,14 @@ export default function ChatCard() {
     const theme = useSelector((state: RootState) => state.User.themeLight);
 
 
-   
-
+    console.log(((TyperID?.receiverId === user?._id && TyperID?.senderId !== user?._id  && typingOn ) && (receiver?._id === TyperID?.senderId )) )
     React.useEffect(() => {
         if ((TyperID?.receiverId === user?._id && TyperID?.senderId !== user?._id  && typingOn ) && (receiver?._id === TyperID?.senderId ))  {
             setTyping(true);
         } else {
             setTyping(false);
         }
-    }, [TyperID, typingOn, user , receiver]);
+    }, [TyperID, typingOn, user , receiver , sendMessage]);
 
     useEffect(() => {
         if (sendMessage !== '') {
