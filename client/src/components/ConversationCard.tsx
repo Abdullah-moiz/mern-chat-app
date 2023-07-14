@@ -10,17 +10,17 @@ export interface ConversationCardProps {
     user: userData;
 }
 
-export default function ConversationCard({ user }: ConversationCardProps, onlineUsers: any) {
+export default function ConversationCard({ user }: ConversationCardProps) {
     const dispatch = useDispatch()
     const typingOn = useSelector((state: any) => state.Chat.typing)
     const TyperID = useSelector((state: any) => state.Chat.typerID)
-    const theme = useSelector((state : RootState) => state.User.themeLight)
+    const theme = useSelector((state: RootState) => state.User.themeLight)
     const [typing, setTyping] = React.useState(false)
     const handleClick = () => {
         dispatch(setChatSelected('basic'))
         dispatch(setReceiverSelected(user))
     }
- 
+
 
 
     React.useEffect(() => {
@@ -30,7 +30,7 @@ export default function ConversationCard({ user }: ConversationCardProps, online
 
 
     return (
-        <div onClick={handleClick} className={`w-11/12 relative h-20  ${theme === 'on' ?  'bg-white  hover:bg-gray-300 text-black' : "bg-slate-800   hover:bg-slate-700 text-white"}  my-2 flex items-center cursor-pointer rounded-2xl px-4 mx-4 justify-start  transition-all duration-700`}>
+        <div onClick={handleClick} className={`w-11/12 relative h-20  ${theme === 'on' ? 'bg-white  hover:bg-gray-300 text-black' : "bg-slate-800   hover:bg-slate-700 text-white"}  my-2 flex items-center cursor-pointer rounded-2xl px-4 mx-4 justify-start  transition-all duration-700`}>
             <div className="avatar mx-4 placeholder">
                 <div className="bg-neutral-focus text-neutral-content rounded-full w-8">
                     <span className="text-xs">{user.name.substring(0, 2)}</span>

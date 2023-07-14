@@ -21,14 +21,18 @@ export default function ChatCard() {
     const user = useSelector((state: RootState) => state.User.user)
     const receiver = useSelector((state: RootState) => state.Chat.receiverSelected)
     const messages = useSelector((state: RootState) => state.Chat.messages)
-    const theme =  useSelector((state : RootState) => state.User.themeLight);
+    const theme = useSelector((state: RootState) => state.User.themeLight);
 
+
+   
 
     React.useEffect(() => {
-       if (TyperID?.receiverId === user?._id  && TyperID?.senderId !== user?._id && typingOn) {
-            setTyping(true)
+        if ((TyperID?.receiverId === user?._id && TyperID?.senderId !== user?._id  && typingOn ) && (receiver?._id === TyperID?.senderId ))  {
+            setTyping(true);
+        } else {
+            setTyping(false);
         }
-    }, [TyperID, typingOn])
+    }, [TyperID, typingOn, user , receiver]);
 
     useEffect(() => {
         if (sendMessage !== '') {
@@ -80,7 +84,7 @@ export default function ChatCard() {
 
     return (
         <>
-            <div className={`w-full h-20 flex  items-center justify-between  ${theme === 'on' ?  'bg-white' : "bg-slate-600"}  text-center`}>
+            <div className={`w-full h-20 flex  items-center justify-between  ${theme === 'on' ? 'bg-white' : "bg-slate-600"}  text-center`}>
                 <div className='flex '>
 
                     <div className="avatar mx-4 placeholder">
@@ -89,20 +93,20 @@ export default function ChatCard() {
                         </div>
                     </div>
                     <div className='flex flex-col   text-left py-2 '>
-                        <h1 className={` ${theme === 'on' ?  'text-black' : "text-white/90 "} font-semibold tracking-widest text-sm uppercase`}>{receiver?.name}</h1>
+                        <h1 className={` ${theme === 'on' ? 'text-black' : "text-white/90 "} font-semibold tracking-widest text-sm uppercase`}>{receiver?.name}</h1>
                         {
-                            typing && <p className={`text-xs ${theme === 'on' ?  'text-black' : "text-white/90 "} tracking-widest font-semibold`}>Typing...</p>
+                            typing && <p className={`text-xs ${theme === 'on' ? 'text-black' : "text-white/90 "} tracking-widest font-semibold`}>Typing...</p>
                         }
                     </div>
                 </div>
 
-                <button onClick={() => dispatch(setChatSelected(false))} className={`${theme === 'on' ?  'text-black' : "text-white/90 "} mx-4`}><RxCross2 className="text-2xl" /></button>
+                <button onClick={() => dispatch(setChatSelected(false))} className={`${theme === 'on' ? 'text-black' : "text-white/90 "} mx-4`}><RxCross2 className="text-2xl" /></button>
 
             </div>
 
 
 
-            <div ref={messageContainerRef} className={`w-full ${theme === 'on' ?  'bg-white' : "bg-slate-600 "}  h-full px-4 py-2 overflow-y-auto`}>
+            <div ref={messageContainerRef} className={`w-full ${theme === 'on' ? 'bg-white' : "bg-slate-600 "}  h-full px-4 py-2 overflow-y-auto`}>
 
 
                 {
@@ -129,8 +133,8 @@ export default function ChatCard() {
 
             </div>
 
-            <form onSubmit={handleSendMessage} className={`h-20   ${theme === 'on' ?  'bg-white' : "bg-slate-600 "} flex items-center justify-start px-4`}>
-                <input value={sendMessage} onChange={(e) => setSendMessage(e.target.value)} type="text" placeholder="Type here" className={`input   ${theme === 'on' ?  'bg-white text-black ' : "bg-slate-600 text-white "}  input-bordered w-full max-w-full`} />
+            <form onSubmit={handleSendMessage} className={`h-20   ${theme === 'on' ? 'bg-white' : "bg-slate-600 "} flex items-center justify-start px-4`}>
+                <input value={sendMessage} onChange={(e) => setSendMessage(e.target.value)} type="text" placeholder="Type here" className={`input   ${theme === 'on' ? 'bg-white text-black ' : "bg-slate-600 text-white "}  input-bordered w-full max-w-full`} />
                 <button type='submit' className='btn btn-circle btn-primary mx-3'><AiOutlineSend className="text-xl" /></button>
             </form>
 

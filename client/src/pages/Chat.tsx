@@ -79,10 +79,10 @@ export default function Chat() {
     useEffect(() => {
         getDataOfAllUsers()
         getDataOfAllGroupsOFThisUser()
-    }, [showConversationBox])
+    }, [])
 
 
-    
+
 
     useEffect(() => {
         if (receiver) {
@@ -92,7 +92,7 @@ export default function Chat() {
         } else {
             return
         }
-    }, [receiver, group ])
+    }, [receiver, group])
 
 
     const getChat = async () => {

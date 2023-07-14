@@ -15,6 +15,44 @@ export const getAllUsers = async (req, res) => {
     }
 }
 
+export const getAllGroups = async (req, res) => {
+    const id = req.query.id;
+    if(!id || id === 'undefined') return res.status(400).json({ success: false, message: 'id is required' })
+    const query = {
+        $or: [
+            { createdBy: id },
+            { users: id }
+        ]
+    };
+
+    try {
+        const getGroupofThisUser = await GroupChat.find(query).populate('users').select('-password').populate('createdBy');
+        return res.status(200).json({ data: getGroupofThisUser, success: true });
+    } catch (error) {
+        console.log('error in server getAllGroups', error.message)
+        return res.status(500).json({ success: false, message: 'Something went wrong' })
+    }
+}
+
+
+export const createGroup = async (req, res) => {
+    const { name, users, createdBy } = req.body;
+
+
+    if (!name || !users || !createdBy) return res.status(400).json({ success: false, message: 'name , users and createdBy are required' })
+
+    try {
+        const newGroup = new GroupChat({ name, users, createdBy });
+        await newGroup.save();
+        return res.status(200).json({ success: true, message: 'Group created successfully' })
+    } catch (error) {
+        console.log('error in server createGroup', error.message)
+        return res.status(500).json({ success: false, message: 'Something went wrong' })
+
+    }
+}
+
+
 export const getChat = async (req, res) => {
     const { senderId, receiverId } = req.query;
     if (!senderId || !receiverId) return res.status(400).json({ success: false, message: 'senderId and receiverId are required' })
@@ -89,39 +127,6 @@ export const sendGroupMessage = async (req, res) => {
 }
 
 
-export const createGroup = async (req, res) => {
-    const { name, users, createdBy } = req.body;
-
-
-    if (!name || !users || !createdBy) return res.status(400).json({ success: false, message: 'name , users and createdBy are required' })
-
-    try {
-        const newGroup = new GroupChat({ name, users, createdBy });
-        await newGroup.save();
-        return res.status(200).json({ success: true, message: 'Group created successfully' })
-    } catch (error) {
-        console.log('error in server createGroup', error.message)
-        return res.status(500).json({ success: false, message: 'Something went wrong' })
-
-    }
-}
 
 
 
-export const getAllGroups = async (req, res) => {
-    const id = req.query.id;
-    const query = {
-        $or: [
-            { createdBy: id },
-            { users: id }
-        ]
-    };
-
-    try {
-        const getGroupofThisUser = await GroupChat.find(query).populate('users').select('-password').populate('createdBy');
-        return res.status(200).json({ data: getGroupofThisUser, success: true });
-    } catch (error) {
-        console.log('error in server getAllGroups', error.message)
-        return res.status(500).json({ success: false, message: 'Something went wrong' })
-    }
-}
