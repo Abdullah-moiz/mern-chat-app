@@ -13,7 +13,7 @@ import { FaUserGroup } from 'react-icons/fa6'
 import { toast, ToastContainer } from 'react-toastify';
 import { MdGroupAdd } from 'react-icons/md'
 import { PiChatsFill } from 'react-icons/pi'
-import Select   from "react-select";
+import Select from "react-select";
 import GroupChatCard from '../components/GroupChatCard';
 import Loading from '../components/Loading';
 import { socket } from '../App';
@@ -27,6 +27,7 @@ export default function Chat() {
     const [showConversationBox, setShowConversationBox] = useState('basic')
     const [searchTerm, setSearchTerm] = useState('');
     const [showName, setShowName] = useState(false)
+    const [typingTimeout, setTypingTimeout] = useState<number | null>(null);
     const chatSelected = useSelector((state: RootState) => state.Chat.chatSelected)
     const token = useSelector((state: RootState) => state.User.token)
     const userData = useSelector((state: RootState) => state.User.user)
@@ -81,7 +82,7 @@ export default function Chat() {
     useEffect(() => {
         getDataOfAllUsers()
         getDataOfAllGroupsOFThisUser()
-    }, [])
+    }, [showConversationBox])
 
 
 
@@ -194,7 +195,7 @@ export default function Chat() {
 
 
 
-    const selectUsers : any = allUsers.map((user) => ({ value: user._id, label: user.name }))
+    const selectUsers: any = allUsers.map((user) => ({ value: user._id, label: user.name }))
 
 
 
@@ -240,6 +241,45 @@ export default function Chat() {
 
 
 
+
+    useEffect(() => {
+        const handleUserIsTyping = () => {
+          socket.emit('userIsTyping', { senderId: userData?._id, receiverId: receiver?._id });
+    
+          if (typingTimeout) {
+            clearTimeout(typingTimeout);
+          }
+    
+          setTypingTimeout(
+            setTimeout(() => {
+                if(socket.on('userIsTyping', (data) => {
+                    if(data === null || data === undefined) return socket.emit('userStopTyping', { senderId: userData?._id, receiverId: receiver?._id });;
+                }))
+              socket.emit('userStopTyping', { senderId: userData?._id, receiverId: receiver?._id });
+              setTypingTimeout(null);
+            }, 2000)
+          );
+        };
+    
+        if (someoneTyping) {
+          handleUserIsTyping();
+        } else {
+          if (typingTimeout) {
+            clearTimeout(typingTimeout);
+            setTypingTimeout(null);
+          }
+        }
+    
+        return () => {
+          if (typingTimeout) {
+            clearTimeout(typingTimeout);
+          }
+        };
+      }, [someoneTyping, userData, receiver]);
+
+
+
+
     useEffect(() => {
         const handleTyping = (data: any) => {
             const { senderId, receiverId } = data;
@@ -250,6 +290,8 @@ export default function Chat() {
         };
 
         socket.on('userIsTyping', handleTyping);
+
+
 
         return () => {
             socket.off('userIsTyping', handleTyping);
@@ -300,7 +342,7 @@ export default function Chat() {
 
             </label>
             {loading && <Loading />}
-            <div className={`lg:w-10/12 mx-2 w-full h-[600px] shadow bg-gray-600   ${theme === 'on' ? 'bg-gray-200' : "bg-slate-700 "}  rounded-xl flex relative  `}>
+            <div className={`lg:w-10/12 mx-2 w-full h-[600px] shadow  ${theme === 'on' ? 'bg-gray-200' : "bg-slate-700 "}  rounded-xl flex relative  `}>
 
                 <div className={`w-20 h-full  ${theme === 'on' ? 'bg-gray-600' : "bg-slate-800  "} rounded-xl flex flex-col   items-center justify-start py-4 text-white gap-4`}>
 
@@ -345,7 +387,7 @@ export default function Chat() {
                 </div>
 
                 <div className={`lg:flex ${chatSelected ? "hidden" : "flex"}  w-full py-2 lg:w-4/12 h-full   flex-col`}>
-                    <div className={`w-full h-[4.4rem] flex items-center justify-center  ${theme === 'on' ? 'bg-gray-200' : "bg-slate-700  "} bg-slate-600 text-center`}>
+                    <div className={`w-full h-[4.4rem] flex items-center justify-center  ${theme === 'on' ? 'bg-gray-200' : "bg-slate-700  "}  text-center`}>
                         <div className={`w-4/5 rounded-xl flex items-center justify-center ${theme === 'on' ? 'bg-white' : "bg-slate-800  "} `}>
                             < BiSearch className={`text-xl  ${theme === 'on' ? 'text-black' : "text-white  "} mx-4`} />
                             <input onChange={handleSearchInputChange} type="text" placeholder="Search..." className={` px-2 py-3 outline-none bg-transparent border-0  ${theme === 'on' ? ' text-black' : " text-white  "}   w-full max-w-full `} ></input>
