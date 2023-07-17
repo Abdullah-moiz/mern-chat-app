@@ -5,7 +5,7 @@ import GroupChat from "../models/GroupChat.js";
 
 export const getAllUsers = async (req, res) => {
     const id = req.query.id;
-    if(id === 'undefined' ||  !id) return res.status(400).json({ success: false, message: 'id is required' })
+    if (id === 'undefined' || !id) return res.status(400).json({ success: false, message: 'id is required' })
     try {
         const getUsers = await User.find({ _id: { $ne: id } });
         return res.status(200).json({ data: getUsers, success: true });
@@ -17,7 +17,7 @@ export const getAllUsers = async (req, res) => {
 
 export const getAllGroups = async (req, res) => {
     const id = req.query.id;
-    if(!id || id === 'undefined') return res.status(400).json({ success: false, message: 'id is required' })
+    if (!id || id === 'undefined') return res.status(400).json({ success: false, message: 'id is required' })
     const query = {
         $or: [
             { createdBy: id },
@@ -76,7 +76,7 @@ export const getGroupChat = async (req, res) => {
     const { senderId, receiverId } = req.query;
     if (!senderId || !receiverId) return res.status(400).json({ success: false, message: 'senderId and receiverId are required' })
     try {
-        const getChat = await Chat.find({receiver: receiverId});
+        const getChat = await Chat.find({ receiver: receiverId });
         return res.status(200).json({ data: getChat, success: true });
     } catch (error) {
         console.log("🚀 ~ file: chat.js:83 ~ getGroupChat ~ error:", error)
@@ -127,5 +127,34 @@ export const sendGroupMessage = async (req, res) => {
 
 
 
+export const deleteGroup = async (req, res) => {
+    const { groupId, ownerId } = req.query
 
+    if (!groupId || !ownerId) return res.status(400).json({ success: false, message: 'groupId and ownerId are required' })
+
+    try {
+        const getGroup = await GroupChat.findOne({ _id: groupId });
+        if (getGroup?.createdBy?.toString() === ownerId) {
+            const deletedGroup = await GroupChat.findByIdAndDelete(groupId);
+            if (deletedGroup) {
+                const query = {
+                    $or: [
+                        { createdBy: ownerId },
+                        { users: ownerId  }
+                    ]
+                };
+                const getGroupofThisUser = await GroupChat.find(query).populate('users').select('-password').populate('createdBy');
+                return res.status(200).json({ data: getGroupofThisUser, success: true, message: 'Group deleted successfully' })
+            }
+
+        } else {
+            return res.status(400).json({ success: false, message: 'You are not allowed to delete this group' })
+        }
+    } catch (error) {
+        console.log("🚀 ~ file: chat.js:138 ~ deleteGroup ~ error:", error)
+        return res.status(500).json({ success: false, message: 'Something went wrong' })
+    }
+
+
+}
 

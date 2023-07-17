@@ -160,3 +160,21 @@ export const send_group_message = async (formData: any , token  : string) => {
             console.log("🚀 ~ file: index.ts:140 ~ constsend_group_message= ~ error:", error)
         }
 }
+
+
+export const delete_group = async (ownerId  : string, groupId : string, token  : string) => {
+    
+    try {
+        const res = await fetch(`http://localhost:8000/api/delete-group?ownerId=${ownerId}&groupId=${groupId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`
+            }
+        });
+        const data = await res.json();
+        return data;
+    } catch (error: any) {
+       console.log("🚀 ~ file: index.ts:178 ~ const delete_group= ~ error:", error)
+    }
+}
