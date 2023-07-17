@@ -8,7 +8,7 @@ import DummyChatCard from '../components/DummyChatCard';
 import GroupConversationCard from '../components/GroupConversationCard';
 import { setAllGroups, setAllUserData, setGroupMessages, setMessages, setTyperID, setTyping, setUserMessageLoading } from '../slices/chatSlice';
 import { create_group, getChatData, getGroupChatData, get_all_users, get_user_group } from '../services';
-import { BiSearch } from 'react-icons/bi'
+import { BiLogOut, BiSearch } from 'react-icons/bi'
 import { FaUserGroup } from 'react-icons/fa6'
 import { toast, ToastContainer } from 'react-toastify';
 import { MdGroupAdd } from 'react-icons/md'
@@ -340,6 +340,8 @@ export default function Chat() {
                 <svg className="swap-off fill-current w-10 h-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" /></svg>
 
             </label>
+            <BiLogOut onClick={() => window.location.reload()} className={`md:text-4xl text-xl cursor-pointer fixed   lg:top-6 lg:right-12 left-5 top-3  ${theme === 'on' ? 'text-black' : "text-white"} `} />
+            
             
             {loading && <Loading />}
             <div className={`lg:w-10/12 mx-2 w-full h-[600px] shadow  ${theme === 'on' ? 'bg-gray-200' : "bg-slate-700 "}  rounded-xl flex relative  `}>

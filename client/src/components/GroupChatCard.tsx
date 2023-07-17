@@ -74,12 +74,15 @@ export default function GroupChatCard() {
                 
                 const { groupID } = data;
 
-                dispatch(setGroupMessages({ groupId: groupID, messages: [data] }));
+                const messageData = { ...data, isFromSocketIO: true };
+
+                dispatch(setGroupMessages({ groupId: groupID, messages: [messageData] }));
             }
         });
 
         return () => {
             socket.off('sendMsg');
+            dispatch(setGroupMessages({ groupId: receiver?._id, messages: [] }));
         };
     }, [receiver]);
 

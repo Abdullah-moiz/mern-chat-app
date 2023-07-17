@@ -71,26 +71,61 @@ export const chatSlice = createSlice({
         },
         setGroupMessages: (state, action) => {
             const { groupId, messages } = action.payload;
+
             if (Array.isArray(messages)) {
-                if (state.groupMessages[groupId]) {
-                    state.groupMessages[groupId].messages.push(...messages);
+                // Check if the messages are received from Socket.IO
+                const isFromSocketIO = messages.some(message => message.isFromSocketIO);
+
+                if (isFromSocketIO) {
+                    // Append the new messages to the existing conversation
+                    if (state.groupMessages[groupId]) {
+                        state.groupMessages[groupId].messages.push(...messages);
+                    } else {
+                        state.groupMessages[groupId] = {
+                            groupId,
+                            messages: [...messages]
+                        };
+                    }
                 } else {
+                    // Replace the existing messages with the newly fetched messages
                     state.groupMessages[groupId] = {
                         groupId,
                         messages: [...messages]
                     };
                 }
             } else {
-                if (state.groupMessages[groupId]) {
-                    state.groupMessages[groupId].messages.push(messages);
-                } else {
-                    state.groupMessages[groupId] = {
-                        groupId,
-                        messages: [messages]
-                    };
-                }
+                // Replace the existing messages with a single message
+                state.groupMessages[groupId] = {
+                    groupId,
+                    messages: [messages]
+                };
             }
         }
+
+
+
+        // setGroupMessages: (state, action) => {
+        //     const { groupId, messages } = action.payload;
+        //     if (Array.isArray(messages)) {
+        //         if (state.groupMessages[groupId]) {
+        //             state.groupMessages[groupId].messages.push(...messages);
+        //         } else {
+        //             state.groupMessages[groupId] = {
+        //                 groupId,
+        //                 messages: [...messages]
+        //             };
+        //         }
+        //     } else {
+        //         if (state.groupMessages[groupId]) {
+        //             state.groupMessages[groupId].messages.push(messages);
+        //         } else {
+        //             state.groupMessages[groupId] = {
+        //                 groupId,
+        //                 messages: [messages]
+        //             };
+        //         }
+        //     }
+        // }
 
     },
 })
