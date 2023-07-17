@@ -17,12 +17,8 @@ Router.post('/send-group-message', sendGroupMessage)
 Router.get('/get-group-chat', getGroupChat)
 
 
-
-
-
-
 Router.use('*', (req, res) => {
-    res.status(404).json({ error: "Page Not Found" })
+    res.status(404).json({ error: "Requested Endpoint not Found !" })
 })
 
 export default Router;

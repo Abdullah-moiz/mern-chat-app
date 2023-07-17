@@ -11,7 +11,7 @@ export const login_user = async (formData: unknown) => {
         const data = await res.json();
         return data;
     } catch (error: any) {
-        console.log('Error at login_user: ', error.message);
+        console.log("🚀 ~ file: index.ts:14 ~ constlogin_user= ~ error:", error)
     }
 
 
@@ -30,7 +30,7 @@ export const register_user = async (formData: unknown) => {
         const data = await res.json();
         return data;
     } catch (error: any) {
-        console.log('Error at register_user : ', error.message);
+        console.log("🚀 ~ file: index.ts:33 ~ constregister_user= ~ error:", error)
     }
 }
 
@@ -43,7 +43,7 @@ export const get_all_users = async (id: unknown) => {
         const data = await res.json();
         return data;
     } catch (error: any) {
-        console.log('Error at get_all_users (services) : ', error.message);
+        console.log("🚀 ~ file: index.ts:46 ~ constget_all_users= ~ error:", error)
     }
 }
 
@@ -57,7 +57,7 @@ export const getChatData = async (data: any) => {
         const data = await res.json();
         return data;
     } catch (error: any) {
-        console.log('Error at get_all_users (services) : ', error.message);
+        console.log("🚀 ~ file: index.ts:60 ~ getChatData ~ error:", error)
     }
 }
 export const getGroupChatData = async (data: any) => {
@@ -69,7 +69,7 @@ export const getGroupChatData = async (data: any) => {
         const data = await res.json();
         return data;
     } catch (error: any) {
-        console.log('Error at get_all_users (services) : ', error.message);
+        console.log("🚀 ~ file: index.ts:72 ~ getGroupChatData ~ error:", error)
     }
 }
 
@@ -87,6 +87,7 @@ export const send_message = async (formData: any) => {
         const data = await res.json();
         return data;
     } catch (error: any) {
+        console.log("🚀 ~ file: index.ts:90 ~ constsend_message= ~ error:", error)
         console.log('Error at send message (services) : ', error.message);
     }
 }
@@ -105,7 +106,7 @@ export const create_group  =  async (formData: any) => {
         const data = await res.json();
         return data;
     } catch (error: any) {
-        console.log('Error at create group (services) : ', error.message);
+        console.log("🚀 ~ file: index.ts:109 ~ constcreate_group= ~ error:", error)
     }
 }
 
@@ -118,7 +119,7 @@ export const get_user_group  = async (id: any) => {
         const data = await res.json();
         return data;
     } catch (error: any) {
-        console.log('Error at get_user_group (services) : ', error.message);
+        console.log("🚀 ~ file: index.ts:122 ~ constget_user_group= ~ error:", error)
     }
 }
 
@@ -136,6 +137,6 @@ export const send_group_message = async (formData: any) => {
             const data = await res.json();
             return data;
         } catch (error: any) {
-            console.log('Error at send_group_message (services) : ', error.message);
+            console.log("🚀 ~ file: index.ts:140 ~ constsend_group_message= ~ error:", error)
         }
 }
