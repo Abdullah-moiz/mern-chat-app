@@ -22,6 +22,7 @@ export default function ChatCard() {
     const receiver = useSelector((state: RootState) => state.Chat.receiverSelected)
     const messages = useSelector((state: RootState) => state.Chat.messages)
     const theme = useSelector((state: RootState) => state.User.themeLight);
+    const token = useSelector((state :RootState) => state.User.token)
 
 
     React.useEffect(() => {
@@ -49,7 +50,7 @@ export default function ChatCard() {
         socket.emit('sendMsg', messageData);
 
 
-        const res = await send_message(messageData);
+        const res = await send_message(messageData , token);
         if (res?.success) {
             toast.success(res?.message)
         } else {

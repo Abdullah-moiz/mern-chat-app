@@ -42,6 +42,7 @@ export default function Chat() {
     const loading = useSelector((state: RootState) => state.Chat.userMessageLoading)
     const theme = useSelector((state: RootState) => state.User.themeLight)
     
+    
 
     useEffect(() => {
         if (!token || !userData) {
@@ -77,7 +78,7 @@ export default function Chat() {
         dispatch(setUserMessageLoading(true))
         if (!userData || !receiver) return dispatch(setUserMessageLoading(false));
         const getMessages = { senderId: userData?._id, receiverId: receiver?._id } as unknown as string
-        const res = await getChatData(getMessages);
+        const res = await getChatData(getMessages,token);
         if (res?.success) {
             dispatch(setUserMessageLoading(false))
             dispatch(setMessages(res?.data))
@@ -88,7 +89,7 @@ export default function Chat() {
 
     const getDataOfAllUsers = async () => {
         if(!userData?._id) return
-        const res = await get_all_users(userData?._id);
+        const res = await get_all_users(userData?._id  , token);
         if (res?.success) {
             dispatch(setAllUserData(res?.data))
         } else {
@@ -98,7 +99,7 @@ export default function Chat() {
 
     const getDataOfAllGroupsOFThisUser = async () => {
         if(!userData?._id) return
-        const res = await get_user_group(userData?._id);
+        const res = await get_user_group(userData?._id , token);
         if (res?.success) {
             dispatch(setAllGroups(res?.data))
         } else {
@@ -118,7 +119,7 @@ export default function Chat() {
         }
 
         const getMessages = { senderId: userData?._id, receiverId: uniqueID } as unknown as string;
-        const res = await getGroupChatData(getMessages);
+        const res = await getGroupChatData(getMessages , token);
         if (res?.success) {
             dispatch(setGroupMessages({ groupId: group?._id, messages: res?.data }));
             dispatch(setUserMessageLoading(false));
@@ -208,7 +209,7 @@ export default function Chat() {
 
         const finalData = { name: groupName, users: selectedGroupUsers, createdBy: userData?._id }
 
-        const res = await create_group(finalData);
+        const res = await create_group(finalData  , token);
         if (res?.success) {
             dispatch(setUserMessageLoading(false))
             toast.success(res?.message)

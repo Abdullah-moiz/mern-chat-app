@@ -20,6 +20,7 @@ export default function GroupChatCard() {
     const [typing, setIsTyping] = useState(false);
     const messageContainerRef = useRef<HTMLDivElement>(null);
     const [sendMessage, setSendMessage] = React.useState('')
+    const token = useSelector((state :RootState) => state.User.token)
     const user = useSelector((state: RootState) => state.User.user)
     const receiver = useSelector((state: RootState) => state.Chat.groupSelected)
     const getGroupMessages = createSelector(
@@ -49,7 +50,7 @@ export default function GroupChatCard() {
 
         socket.emit('sendMsg', messageData);
 
-        const res = await send_group_message(messageData);
+        const res = await send_group_message(messageData , token);
         if (res?.success) {
             toast.success(res?.message)
         } else {
