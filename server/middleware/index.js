@@ -3,14 +3,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const secretKey = process.env.JWT_SECREAT ?? 'default_secret_dumbScret';
-console.log("🚀 ~ file: index.js:6 ~ secretKey:", secretKey)
 
 
 
 const authenticateToken = (req, res, next) => {
     const token = req.headers['authorization'].split(' ')[1];
-  console.log("🚀 ~ file: index.js:9 ~ authenticateToken ~ token:", token);
-
   try {
     if (!token) {
       return res
