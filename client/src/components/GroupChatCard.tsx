@@ -49,8 +49,6 @@ export default function GroupChatCard() {
 
         socket.emit('sendMsg', messageData);
 
-        dispatch(setGroupMessages({ groupId: receiver?._id, messages: [messageData] }));
-
         const res = await send_group_message(messageData);
         if (res?.success) {
             toast.success(res?.message)

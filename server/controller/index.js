@@ -25,7 +25,7 @@ export const LoginUser = async (req, res) => {
         return res.json({ success: true, message: "Login Successfull",  finalData})
 
     } catch (error) {
-        console.log('Error in login (server) => ', error);
+        console.log("🚀 ~ file: index.js:28 ~ LoginUser ~ error:", error)
         return res.json({ success: false, message: "Something Went Wrong Please Retry Later !" })
     }
 }
@@ -51,7 +51,7 @@ export const RegisterUser = async (req, res) => {
             if(createUser) return res.json({ success: true, message: "Account created successfully" });
         }
     } catch (error) {
-        console.log('Error in register (server) => ', error);
+        console.log("🚀 ~ file: index.js:55 ~ RegisterUser ~ error:", error)
         return res.json({ success: false, message: "Something Went Wrong Please Retry Later !" })
     }
 }

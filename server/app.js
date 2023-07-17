@@ -7,7 +7,6 @@ import dotenv from 'dotenv';
 import { createServer } from "http";
 import { Server } from "socket.io";
 
-
 dotenv.config();
 const app = express();
 const port = 8000;
@@ -15,21 +14,12 @@ const connectionUrl = process.env.ConnectionUrl;
 
 const httpServer = createServer(app);
 
-
-
-
 export const io = new Server(httpServer, {
     cors: {
         origin: "*",
         methods: ["GET", "POST"],
     }
 });
-
-
-
-
-
-
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
@@ -41,21 +31,7 @@ mongoose.connect(connectionUrl, { useNewUrlParser: true, useUnifiedTopology: tru
     .catch((err) => console.log("Getting Error from DB connection" + err.message))
 
 
-
-const activeUsers = new Set();
-
 io.on("connection", (socket) => {
-
-    socket.on('userActive', (userId) => {
-        activeUsers.add(userId);
-        io.emit('userStatus', { userId, online: true });
-    });
-
-    // Handle user disconnection
-    socket.on('userInactive', (userId) => {
-        activeUsers.delete(userId);
-        io.emit('userStatus', { userId, online: false });
-    });
     socket.on('sendMsg', async (payload) => {
         io.emit('sendMsg', payload);
     });
@@ -72,12 +48,6 @@ io.on("connection", (socket) => {
 });
 
 app.use('/api/', OurRouter)
-
-
-
-
-
-
 
 httpServer.listen(port, () => {
     console.log(`App is running at http://localhost:${port}`);
