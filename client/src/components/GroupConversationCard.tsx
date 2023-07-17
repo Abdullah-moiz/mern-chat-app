@@ -31,7 +31,7 @@ export default function GroupConversationCard({ group }: GroupConversationCardPr
     }, [typingOn, TyperID])
 
     return (
-        <div onClick={handleClick} className={`w-11/12 relative h-20  ${theme === 'on' ?  'bg-white  hover:bg-gray-300 text-black' : "bg-slate-800   hover:bg-slate-700 text-white"}  my-2 flex items-center cursor-pointer rounded-2xl px-4 mx-4 justify-start  transition-all duration-700`}>
+        <div onClick={handleClick} className={`w-11/12 relative h-20  ${theme === 'on' ?  'bg-white  hover:bg-gray-300 text-black' : "bg-slate-800   hover:bg-slate-950 text-white"}  my-2 flex items-center cursor-pointer rounded-2xl px-4 mx-4 justify-start  transition-all duration-700`}>
             <div className="avatar mx-4 placeholder">
                 <div className="bg-neutral-focus text-neutral-content rounded-full w-8">
                     <span className="text-xs">{group.name.substring(0, 2)}</span>
