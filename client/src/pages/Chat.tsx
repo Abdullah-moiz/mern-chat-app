@@ -46,11 +46,14 @@ export default function Chat() {
 
     useEffect(() => {
         if (!token || !userData) {
+            socket.emit('userOffline', userData?._id)
             navigate('/')
         }
     }, [token, userData])
 
 
+
+ 
 
 
     useEffect(() => {

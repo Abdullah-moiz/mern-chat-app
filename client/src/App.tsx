@@ -4,6 +4,9 @@ import Register from './pages/Register'
 import Chat from './pages/Chat'
 import { io } from "socket.io-client";
 import NotFound from './pages/NotFound';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from './store/store';
 
 
 
@@ -11,6 +14,11 @@ import NotFound from './pages/NotFound';
 export const socket = io("http://localhost:8000")
 
 function App() {
+  const user = useSelector((state: RootState) => state.User.user);
+
+  useEffect(() => {
+    socket.emit('userOnline', user?._id)
+  }, [user])
 
 
   return (

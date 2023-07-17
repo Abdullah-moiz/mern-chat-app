@@ -6,6 +6,7 @@ import cors from "cors";
 import dotenv from 'dotenv';
 import { createServer } from "http";
 import { Server } from "socket.io";
+import User from "./models/User.js";
 
 dotenv.config();
 const app = express();
@@ -32,6 +33,24 @@ mongoose.connect(connectionUrl, { useNewUrlParser: true, useUnifiedTopology: tru
 
 
 io.on("connection", (socket) => {
+    let userId
+   socket.on('userOnline', async (payload) => {
+         userId  = payload;
+        if(!userId) return console.log("No user Id")
+        const user = await User.findById(userId);
+        user.online = true;
+        await user.save();
+        io.emit('userOnline', { userId });
+    });
+
+    socket.on('disconnect', async (payload) => {
+        if(!userId) return console.log("No user Id")
+        const user = await User.findById(userId);
+        user.online = false;
+        await user.save();
+        io.emit('userOffline', { userId });
+    });
+
     socket.on('sendMsg', async (payload) => {
         io.emit('sendMsg', payload);
     });

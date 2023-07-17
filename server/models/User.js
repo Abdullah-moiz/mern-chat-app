@@ -5,7 +5,6 @@ const UserSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, "Please provide a name"],
-        unique: true,
     },
     email: {
         type: String,
@@ -20,6 +19,10 @@ const UserSchema = new mongoose.Schema({
         type: Number,
         required: [true, "Please provide a Phone Number"],
     },
+    online: {
+        type: Boolean,
+        default: false,
+    }
 
 },{timestamps : true});
 

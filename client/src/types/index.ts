@@ -22,6 +22,7 @@ export interface userData {
     email: string;
     name: string;
     phone: string;
+    online : boolean;
     _id: string;
     users: userData[];
     createdBy: userData;
@@ -31,6 +32,7 @@ export interface userData {
 
 export interface groupData {
     email: string;
+    online  :boolean
     phone: string;
     _id: string;
     name: string;
