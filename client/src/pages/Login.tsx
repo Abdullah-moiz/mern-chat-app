@@ -53,7 +53,7 @@ export default function Login() {
     return (
         <section className="bg-gradient-to-bl from-gray-700 via-gray-900 to-black dark:bg-gray-900  w-full h-screen ">
             <div className="flex flex-col items-center justify-center h-full px-6 py-8 mx-auto md:h-screen lg:py-0">
-                <Link to='' className="flex items-center mb-6 text-2xl font-semibold text-gray-900 text-white">
+                <Link to='' className="flex items-center mb-6 text-2xl font-semibold  text-white">
                     <img className="w-8 h-8 mr-2" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="logo" />
                     Chat App
                 </Link>
