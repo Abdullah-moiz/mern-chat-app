@@ -2,10 +2,6 @@ import React, { useEffect, useState, useRef, FormEvent } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../store/store'
 import { useNavigate } from 'react-router-dom'
-import ConversationCard from '../components/ConversationCard';
-import ChatCard from '../components/ChatCard';
-import DummyChatCard from '../components/DummyChatCard';
-import GroupConversationCard from '../components/GroupConversationCard';
 import { setAllGroups, setAllUserData, setGroupMessages, setMessages, setTyperID, setTyping, setUserMessageLoading } from '../slices/chatSlice';
 import { create_group, getChatData, getGroupChatData, get_all_users, get_user_group } from '../services';
 import { BiLogOut, BiSearch } from 'react-icons/bi'
@@ -14,11 +10,10 @@ import { toast, ToastContainer } from 'react-toastify';
 import { MdGroupAdd } from 'react-icons/md'
 import { PiChatsFill } from 'react-icons/pi'
 import Select from "react-select";
-import GroupChatCard from '../components/GroupChatCard';
-import Loading from '../components/Loading';
 import { socket } from '../App';
 import { setTheme } from '../slices/userSlice';
-import UserActivityDetector from '../components/UserActivityDetector';
+import { ChatCard, ConversationCard, DummyChatCard, GroupChatCard, GroupConversationCard , Loading } from '../components';
+
 
 
 export default function Chat() {
@@ -331,7 +326,6 @@ export default function Chat() {
 
     return (
         <div className={`w-full  min-h-screen ${theme === 'on' ? 'bg-gray-50' : "bg-slate-950"} flex items-center justify-center`}>
-            <UserActivityDetector />
 
             <label className={`swap swap-rotate fixed lg:top-5 lg:right-32 right-10 top-3  ${theme === 'on' ? 'text-black' : "text-white"} `}>
 

@@ -36,7 +36,7 @@ export const register_user = async (formData: unknown) => {
 
 
 export const get_all_users = async (id: unknown , token  : string) => {
-    console.log("🚀 ~ file: index.ts:39 ~ constget_all_users= ~ token:", token)
+    
     try {
         const res = await fetch(`http://localhost:8000/api/get-all-users?id=${id}`, {
             method: 'GET',
@@ -53,7 +53,7 @@ export const get_all_users = async (id: unknown , token  : string) => {
 
 
 export const getChatData = async (data: any , token  : string) => {
-    console.log("🚀 ~ file: index.ts:53 ~ getChatData ~ token:", token)
+   
     const { senderId, receiverId } = data;
     try {
         const res = await fetch(`http://localhost:8000/api/get-user-chat?senderId=${senderId}&receiverId=${receiverId}`, {
@@ -69,7 +69,7 @@ export const getChatData = async (data: any , token  : string) => {
     }
 }
 export const getGroupChatData = async (data: any, token  : string) => {
-    console.log("🚀 ~ file: index.ts:66 ~ getGroupChatData ~ token:", token)
+   
     const { senderId, receiverId } = data;
     try {
         const res = await fetch(`http://localhost:8000/api/get-group-chat?senderId=${senderId}&receiverId=${receiverId}`, {
@@ -87,7 +87,7 @@ export const getGroupChatData = async (data: any, token  : string) => {
 
 
 export const send_message = async (formData: any , token  : string) => {
-console.log("🚀 ~ file: index.ts:81 ~ constsend_message= ~ token:", token)
+
 
     try {
         const res = await fetch(`http://localhost:8000/api/send-user-message`, {
@@ -109,7 +109,6 @@ console.log("🚀 ~ file: index.ts:81 ~ constsend_message= ~ token:", token)
 
 
 export const create_group  =  async (formData: any , token  : string) => {
-    console.log("🚀 ~ file: index.ts:102 ~ constcreate_group= ~ token:", token)
     try {
         const res = await fetch(`http://localhost:8000/api/create-group`, {
             method: 'POST',
@@ -129,7 +128,6 @@ export const create_group  =  async (formData: any , token  : string) => {
 
 
 export const get_user_group  = async (id: any , token  : string) => {
-    console.log("🚀 ~ file: index.ts:120 ~ constget_user_group= ~ token:", token)
     try {
         const res = await fetch(`http://localhost:8000/api/get-user-group?id=${id}`, {
             method: 'GET',
@@ -146,7 +144,6 @@ export const get_user_group  = async (id: any , token  : string) => {
 
 
 export const send_group_message = async (formData: any , token  : string) => {
-    console.log("🚀 ~ file: index.ts:134 ~ constsend_group_message= ~ token:", token)
     
         try {
             const res = await fetch(`http://localhost:8000/api/send-group-message`, {
