@@ -1,5 +1,5 @@
 import express from 'express';
-import { LoginUser, RegisterUser } from '../controller/index.js';
+import { LoginUser, RegisterUser } from '../controller/auth.js';
 import { getAllUsers, getChat, sendMessage, createGroup, getAllGroups, sendGroupMessage, getGroupChat , deleteGroup } from '../controller/chat.js';
 import authenticateToken from '../middleware/index.js';
 const Router = express.Router();
