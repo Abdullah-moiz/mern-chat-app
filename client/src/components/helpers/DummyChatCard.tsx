@@ -1,7 +1,7 @@
 
 import {FaWhatsapp} from 'react-icons/fa'
 import { useSelector } from 'react-redux'
-import { RootState } from '../store/store'
+import { RootState } from '../../store/store'
 
 export default function DummyChatCard() {
   const theme =  useSelector((state : RootState) => state.User.themeLight)

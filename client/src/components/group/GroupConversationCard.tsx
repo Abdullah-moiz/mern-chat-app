@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { groupData } from '../types';
-import { setAllGroups, setChatSelected, setGroupSelected } from '../slices/chatSlice';
+import { groupData } from '../../types';
+import { setAllGroups, setChatSelected, setGroupSelected } from '../../slices/chatSlice';
 import React from 'react';
-import { RootState } from '../store/store';
+import { RootState } from '../../store/store';
 import { MdDelete } from 'react-icons/md';
-import { delete_group } from '../services';
+import { delete_group } from '../../services';
 import { toast } from 'react-toastify';
 
 export interface GroupConversationCardProps {
@@ -42,7 +42,8 @@ export default function GroupConversationCard({ group }: GroupConversationCardPr
         const res = await delete_group(userID, group._id, token)
         if (res?.success) {
             toast.success(res?.message)
-            dispatch(setChatSelected('basic'))
+            dispatch(setChatSelected(false))
+            dispatch(setGroupSelected({}))
             dispatch(setAllGroups(res?.data))
         } else {
             toast.error(res?.message)

@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { setChatSelected, setReceiverSelected } from '../slices/chatSlice'
-import { userData } from '../types'
+import { setChatSelected, setReceiverSelected } from '../../slices/chatSlice'
+import { userData } from '../../types'
 import React from 'react';
-import { RootState } from '../store/store';
+import { RootState } from '../../store/store';
 
 
 

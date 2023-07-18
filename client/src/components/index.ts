@@ -1,9 +1,9 @@
-import ChatCard from "./ChatCard";
-import ConversationCard from "./ConversationCard";
-import DummyChatCard from "./DummyChatCard";
-import GroupChatCard from "./GroupChatCard";
-import GroupConversationCard from "./GroupConversationCard";
-import Loading from "./Loading";
+import ChatCard from "./private/ChatCard";
+import ConversationCard from "./private/ConversationCard";
+import DummyChatCard from "./helpers/DummyChatCard";
+import GroupChatCard from "./group/GroupChatCard";
+import GroupConversationCard from "./group/GroupConversationCard";
+import Loading from "./helpers/Loading";
 
 
 export {ChatCard , ConversationCard , DummyChatCard , GroupChatCard , GroupConversationCard , Loading}

@@ -1,12 +1,12 @@
 import  { useEffect , useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import { Link, useNavigate } from 'react-router-dom'
-import { LoginFormValues } from '../types';
+import { LoginFormValues } from '../../types';
 import { useForm, SubmitHandler } from "react-hook-form";
-import { login_user } from '../services';
+import { login_user } from '../../services';
 import { useDispatch, useSelector } from 'react-redux';
-import { setToken, setUserData } from '../slices/userSlice';
-import { RootState } from '../store/store';
+import { setToken, setUserData } from '../../slices/userSlice';
+import { RootState } from '../../store/store';
 
 
 

@@ -2,11 +2,11 @@ import React, { useRef, useEffect } from 'react'
 import { AiOutlineSend } from 'react-icons/ai';
 import { RxCross2 } from 'react-icons/rx';
 import { useDispatch, useSelector } from 'react-redux';
-import { setChatSelected, setMessages, setSomeoneTyping, } from '../slices/chatSlice';
-import { socket } from '../App';
+import { setChatSelected, setMessages, setSomeoneTyping, } from '../../slices/chatSlice';
+import { socket } from '../../App';
 import { toast } from 'react-toastify';
-import { RootState } from '../store/store';
-import { send_message } from '../services';
+import { RootState } from '../../store/store';
+import { send_message } from '../../services';
 
 
 

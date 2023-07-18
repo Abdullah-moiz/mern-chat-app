@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import { Link, useNavigate } from 'react-router-dom'
-import { RegisterFormValues } from '../types';
+import { RegisterFormValues } from '../../types';
 import { useForm, SubmitHandler } from "react-hook-form";
-import { register_user } from '../services';
+import { register_user } from '../../services';
 
 
 

@@ -2,13 +2,13 @@ import React, { useRef, useEffect, useState } from 'react'
 import { AiOutlineSend } from 'react-icons/ai';
 import { RxCross2 } from 'react-icons/rx';
 import { useDispatch, useSelector } from 'react-redux';
-import { setChatSelected, setGroupMessages,  setTyperID, setTyping } from '../slices/chatSlice';
-import { socket } from '../App';
+import { setChatSelected, setGroupMessages,  setTyperID, setTyping } from '../../slices/chatSlice';
+import { socket } from '../../App';
 import { toast } from 'react-toastify';
-import { RootState } from '../store/store';
-import { send_group_message } from '../services';
+import { RootState } from '../../store/store';
+import { send_group_message } from '../../services';
 import { createSelector } from '@reduxjs/toolkit';
-import { groupMessges, receiverSelected } from '../types';
+import { groupMessges, receiverSelected } from '../../types';
 
 
 

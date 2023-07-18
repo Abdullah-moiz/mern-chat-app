@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
-import Login from './pages/Login'
-import Register from './pages/Register'
+import Login from './pages/auth/Login'
+import Register from './pages/auth/Register'
 import Chat from './pages/Chat'
 import { io } from "socket.io-client";
 import NotFound from './pages/NotFound';
