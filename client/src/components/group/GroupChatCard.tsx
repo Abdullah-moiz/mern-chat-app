@@ -2,25 +2,29 @@ import React, { useRef, useEffect, useState } from 'react'
 import { AiOutlineSend } from 'react-icons/ai';
 import { RxCross2 } from 'react-icons/rx';
 import { useDispatch, useSelector } from 'react-redux';
-import { setChatSelected, setGroupMessages,  setTyperID, setTyping } from '../../slices/chatSlice';
+import { setChatSelected, setGroupMessages, setTyperID, setTyping } from '../../slices/chatSlice';
 import { socket } from '../../App';
 import { toast } from 'react-toastify';
 import { RootState } from '../../store/store';
-import { send_group_message } from '../../services';
+import { delete_messages_from_me, send_group_message } from '../../services';
 import { createSelector } from '@reduxjs/toolkit';
 import { groupMessges, receiverSelected } from '../../types';
+import { MdDelete } from 'react-icons/md';
+
+
+export interface GroupChatCardProps {
+    getGroupChat: () => void;
+}
 
 
 
-
-
-
-export default function GroupChatCard() {
+export default function GroupChatCard({ getGroupChat }: GroupChatCardProps) {
     const dispatch = useDispatch()
     const [typing, setIsTyping] = useState(false);
     const messageContainerRef = useRef<HTMLDivElement>(null);
     const [sendMessage, setSendMessage] = React.useState('')
-    const token = useSelector((state :RootState) => state.User.token)
+    const [selectedMessages, setSelectedMessages] = useState<string[]>([]);
+    const token = useSelector((state: RootState) => state.User.token)
     const user = useSelector((state: RootState) => state.User.user)
     const receiver = useSelector((state: RootState) => state.Chat.groupSelected)
     const getGroupMessages = createSelector(
@@ -34,7 +38,7 @@ export default function GroupChatCard() {
             return [];
         }
     );
-    const theme =  useSelector((state : RootState) => state.User.themeLight);
+    const theme = useSelector((state: RootState) => state.User.themeLight);
     const messages = useSelector((state: RootState) => getGroupMessages(state, receiver));
     const uniqueID = `${receiver?.users?.map(user => user?._id).join('-')}-${receiver?.createdBy?._id}`;
 
@@ -50,7 +54,7 @@ export default function GroupChatCard() {
 
         socket.emit('sendMsg', messageData);
 
-        const res = await send_group_message(messageData , token);
+        const res = await send_group_message(messageData, token);
         if (res?.success) {
             toast.success(res?.message)
         } else {
@@ -69,9 +73,9 @@ export default function GroupChatCard() {
 
     useEffect(() => {
         socket.on('sendMsg', (data) => {
-            
+
             if (data.groupID === receiver?._id) {
-                
+
                 const { groupID } = data;
 
                 const messageData = { ...data, isFromSocketIO: true };
@@ -137,16 +141,35 @@ export default function GroupChatCard() {
     }, []);
 
 
+    const handleSelectMessage = (messageId: string) => {
+        setSelectedMessages((prevSelected) => {
+            if (prevSelected.includes(messageId)) {
+                return prevSelected.filter((id) => id !== messageId);
+            } else {
+                return [...prevSelected, messageId];
+            }
+        });
+    };
 
 
 
+    const handleDeleteMessage = async () => {
+        const finalData = {deletedMessageofThisUser : selectedMessages  , userID : user?._id , groupId : receiver?._id};
 
-
+        const res =  await delete_messages_from_me(finalData , token);
+        if(res?.success){
+            toast.success(res?.message)
+            getGroupChat();
+            setSelectedMessages([])
+        }else{
+            toast.error(res?.message)
+        }
+    }
 
 
     return (
         <>
-            <div className={`w-full h-20 flex  items-center justify-between  ${theme === 'on' ?  'bg-white' : "bg-slate-600"}  text-center`}>
+            <div className={`w-full h-20 flex  items-center justify-between  ${theme === 'on' ? 'bg-white' : "bg-slate-600"}  text-center`}>
                 <div className='flex '>
 
                     <div className="avatar mx-4 placeholder">
@@ -155,34 +178,37 @@ export default function GroupChatCard() {
                         </div>
                     </div>
                     <div className='flex flex-col   text-left py-2 '>
-                    <h1 className={` ${theme === 'on' ?  'text-black' : "text-white/90 "} font-semibold tracking-widest text-sm uppercase`}>{receiver?.name}</h1>
+                        <h1 className={` ${theme === 'on' ? 'text-black' : "text-white/90 "} font-semibold tracking-widest text-sm uppercase`}>{receiver?.name}</h1>
                         {
-                            typing && <p className={`text-xs ${theme === 'on' ?  'text-black' : "text-white/90 "} tracking-widest font-semibold`}>Typing...</p>
+                            typing && <p className={`text-xs ${theme === 'on' ? 'text-black' : "text-white/90 "} tracking-widest font-semibold`}>Typing...</p>
                         }
                     </div>
                 </div>
 
-                <button onClick={() => dispatch(setChatSelected(false))} className={`${theme === 'on' ?  'text-black' : "text-white/90 "} mx-4`}><RxCross2 className="text-2xl" /></button>
+                <button onClick={() => dispatch(setChatSelected(false))} className={`${theme === 'on' ? 'text-black' : "text-white/90 "} mx-4`}><RxCross2 className="text-2xl" /></button>
 
             </div>
 
 
 
-            <div ref={messageContainerRef} className={`w-full ${theme === 'on' ?  'bg-white' : "bg-slate-600 "}  h-full px-4 py-2 overflow-y-auto`}>
+            <div ref={messageContainerRef} className={`w-full ${theme === 'on' ? 'bg-white' : "bg-slate-600 "}  h-full px-4 py-2 overflow-y-auto`}>
 
                 {
                     messages?.map((message: any, i: any) => {
                         const isSender = message?.receiver === user?._id;
                         const avatarText = isSender ? "Y" : "O";
                         const chatClass = isSender ? "chat-start" : "chat-end";
+                        const isSelected = selectedMessages.includes(message._id);
                         return (
-                            <div key={i} className={`chat  ${chatClass}`}>
-                                <div className="avatar chat-image mx-4 placeholder">
+                            <div key={i} className={`chat relative  ${chatClass}`}>
+                                <div onClick={() => handleSelectMessage(message._id)} className={`avatar chat-image mx-4 flex items-center justify-center placeholder ${isSelected ? 'ring-2 ring-primary' : ''}`}>
                                     <div className="bg-neutral-focus text-neutral-content rounded-full w-8">
                                         <span className="text-xs">{avatarText}</span>
                                     </div>
                                 </div>
-                                <div className="chat-bubble">{message.message}</div>
+                                <div className="chat-bubble relative">{message.message} </div>
+
+
                             </div>
                         )
                     })
@@ -191,9 +217,20 @@ export default function GroupChatCard() {
 
 
             </div>
+            {selectedMessages.length > 0 && (
+                <div className="w-full h-12 flex items-center justify-center">
+                    <button
+                        onClick={handleDeleteMessage}
+                        className="btn btn-sm btn-error"
+                    >
+                        <MdDelete className="text-xl" />
+                        Delete {selectedMessages.length} {selectedMessages.length > 1 ? 'messages' : 'message'}
+                    </button>
+                </div>
+            )}
 
-            <form onSubmit={handleSendMessage} className={`h-20   ${theme === 'on' ?  'bg-white' : "bg-slate-600 "} flex items-center justify-start px-4`}>
-            <input value={sendMessage} onChange={(e) => setSendMessage(e.target.value)} type="text" placeholder="Type here" className={`input   ${theme === 'on' ?  'bg-white text-black ' : "bg-slate-600 text-white "}  input-bordered w-full max-w-full`} />
+            <form onSubmit={handleSendMessage} className={`h-20   ${theme === 'on' ? 'bg-white' : "bg-slate-600 "} flex items-center justify-start px-4`}>
+                <input value={sendMessage} onChange={(e) => setSendMessage(e.target.value)} type="text" placeholder="Type here" className={`input   ${theme === 'on' ? 'bg-white text-black ' : "bg-slate-600 text-white "}  input-bordered w-full max-w-full`} />
                 <button type='submit' className='btn btn-circle btn-primary mx-3'><AiOutlineSend className="text-xl" /></button>
             </form>
 

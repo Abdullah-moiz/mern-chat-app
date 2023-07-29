@@ -116,7 +116,7 @@ export default function Chat() {
             dispatch(setGroupMessages({ groupId: group?._id, messages: [] }));
         }
 
-        const getMessages = { senderId: userData?._id, receiverId: uniqueID } as unknown as string;
+        const getMessages = {groupId : group?._id,  senderId: userData?._id, receiverId: uniqueID } as unknown as string;
         const res = await getGroupChatData(getMessages, token);
         if (res?.success) {
             dispatch(setGroupMessages({ groupId: group?._id, messages: res?.data }));
@@ -409,7 +409,7 @@ export default function Chat() {
                                 <>
                                     {
                                         filterItems(searchTerm)?.map((group, index) => (
-                                            <GroupConversationCard  key={group?._id + index} group={group} />
+                                            <GroupConversationCard  key={group?._id + index} group={group}  />
                                         )
                                         )
                                     }
@@ -429,7 +429,7 @@ export default function Chat() {
                     {chatSelected === 'basic' ? (
                         <ChatCard />
                     ) : chatSelected === 'group' ? (
-                        <GroupChatCard  />
+                        <GroupChatCard  getGroupChat={getGroupChat} />
                     ) : (
                         <DummyChatCard />
                     )}

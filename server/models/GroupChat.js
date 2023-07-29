@@ -1,5 +1,19 @@
 import mongoose from "mongoose";
 
+const DeletedMessageSchema = new mongoose.Schema({
+    userID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users",
+        required: true,
+    },
+    deletedMessageofThisUser: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "chats",
+        },
+    ],
+});
+
 
 const GroupChatSchema = new mongoose.Schema({
     name: {
@@ -22,9 +36,11 @@ const GroupChatSchema = new mongoose.Schema({
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "users",
-    },    
-}, {timestamps : true});
+    },
+    deletedMessage: [DeletedMessageSchema],
+}, { timestamps: true });
 
-const GroupChat = mongoose.models.groupchats ||  mongoose.model("groupchats", GroupChatSchema);
+
+const GroupChat = mongoose.models.groupchats || mongoose.model("groupchats", GroupChatSchema);
 
 export default GroupChat;
