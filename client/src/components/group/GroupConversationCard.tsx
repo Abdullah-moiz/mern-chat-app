@@ -9,10 +9,11 @@ import { toast } from 'react-toastify';
 
 export interface GroupConversationCardProps {
     group: groupData;
+    
 }
 
 
-export default function GroupConversationCard({ group  }: GroupConversationCardProps ) {
+export default function GroupConversationCard({ group   }: GroupConversationCardProps ) {
     const dispatch = useDispatch()
     const user = useSelector((state: RootState) => state.User.user);
     const typingOn = useSelector((state: any) => state.Chat.typing)

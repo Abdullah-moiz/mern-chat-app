@@ -14,11 +14,12 @@ import { MdDelete } from 'react-icons/md';
 
 export interface GroupChatCardProps {
     getGroupChat: () => void;
+    setShowConversationBox: (value: string) => void;
 }
 
 
 
-export default function GroupChatCard({ getGroupChat }: GroupChatCardProps) {
+export default function GroupChatCard({ getGroupChat  , setShowConversationBox }: GroupChatCardProps) {
     const dispatch = useDispatch()
     const [typing, setIsTyping] = useState(false);
     const messageContainerRef = useRef<HTMLDivElement>(null);
@@ -166,6 +167,10 @@ export default function GroupChatCard({ getGroupChat }: GroupChatCardProps) {
         }
     }
 
+    const handleCloseChatCard = () => {
+         dispatch(setChatSelected(false))
+         setShowConversationBox('basic')
+    }
 
     return (
         <>
@@ -185,7 +190,7 @@ export default function GroupChatCard({ getGroupChat }: GroupChatCardProps) {
                     </div>
                 </div>
 
-                <button onClick={() => dispatch(setChatSelected(false))} className={`${theme === 'on' ? 'text-black' : "text-white/90 "} mx-4`}><RxCross2 className="text-2xl" /></button>
+                <button onClick={handleCloseChatCard} className={`${theme === 'on' ? 'text-black' : "text-white/90 "} mx-4`}><RxCross2 className="text-2xl" /></button>
 
             </div>
 
@@ -201,7 +206,7 @@ export default function GroupChatCard({ getGroupChat }: GroupChatCardProps) {
                         const isSelected = selectedMessages.includes(message._id);
                         return (
                             <div key={i} className={`chat relative  ${chatClass}`}>
-                                <div onClick={() => handleSelectMessage(message._id)} className={`avatar chat-image mx-4 flex items-center justify-center placeholder ${isSelected ? 'ring-2 ring-primary' : ''}`}>
+                                <div onClick={() => handleSelectMessage(message._id)} className={`avatar chat-image mx-4 flex items-center justify-center placeholder ${isSelected && theme  === 'on' ? 'ring-2 ring-slate-900' : 'ring-2 ring-white'}`}>
                                     <div className="bg-neutral-focus text-neutral-content rounded-full w-8">
                                         <span className="text-xs">{avatarText}</span>
                                     </div>
@@ -224,7 +229,7 @@ export default function GroupChatCard({ getGroupChat }: GroupChatCardProps) {
                         className="btn btn-sm btn-error"
                     >
                         <MdDelete className="text-xl" />
-                        Delete {selectedMessages.length} {selectedMessages.length > 1 ? 'messages' : 'message'}
+                        Delete {selectedMessages.length} {selectedMessages.length > 1 ? 'messages' : 'message'} from me
                     </button>
                 </div>
             )}

@@ -76,32 +76,25 @@ export const getChat = async (req, res) => {
 
 export const getGroupChat = async (req, res) => {
     const { senderId, receiverId, groupId } = req.query;
-
-    console.log(req.query)
-
-
-
-
     try {
         const groups = await GroupChat.find({ _id: groupId });
 
         const allMessages = await Chat.find({ receiver: receiverId });
-        console.log(allMessages)
 
         const senderDeletedMessagesEntry = groups.reduce((result, group) => {
             const deletedMessageEntry = group.deletedMessage.find(
                 (entry) => entry.userID.toString() === senderId
             );
             if (deletedMessageEntry) {
-                result.push(...deletedMessageEntry.deletedMessageofThisUser.map((msg) => msg.toString()));
+                result.push(...deletedMessageEntry.deletedMessageofThisUser?.map((msg) => msg?.toString()));
             }
             return result;
         }, []);
         const filteredChat = allMessages.map((message) => {
-            if (senderDeletedMessagesEntry.includes(message._id.toString())) {
+            if (senderDeletedMessagesEntry.includes(message?._id?.toString())) {
                 return null;
             } else {
-                return message.toObject();
+                return message?.toObject();
             }
         }).filter((message) => message !== null); 
 

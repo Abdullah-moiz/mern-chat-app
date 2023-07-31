@@ -429,7 +429,7 @@ export default function Chat() {
                     {chatSelected === 'basic' ? (
                         <ChatCard />
                     ) : chatSelected === 'group' ? (
-                        <GroupChatCard  getGroupChat={getGroupChat} />
+                        <GroupChatCard  getGroupChat={getGroupChat} setShowConversationBox={setShowConversationBox} />
                     ) : (
                         <DummyChatCard />
                     )}
