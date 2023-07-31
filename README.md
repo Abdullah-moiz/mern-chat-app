@@ -1,4 +1,4 @@
-###### Chat Application Using MERN STACK & Socket.io
+###### Chat Application Using MERN STACK & SocketIO
 
 
 ## Authors
