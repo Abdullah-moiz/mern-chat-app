@@ -19,7 +19,7 @@ export interface GroupChatCardProps {
 
 
 
-export default function GroupChatCard({ getGroupChat  , setShowConversationBox }: GroupChatCardProps) {
+export default function GroupChatCard({ getGroupChat, setShowConversationBox }: GroupChatCardProps) {
     const dispatch = useDispatch()
     const [typing, setIsTyping] = useState(false);
     const messageContainerRef = useRef<HTMLDivElement>(null);
@@ -155,21 +155,21 @@ export default function GroupChatCard({ getGroupChat  , setShowConversationBox }
 
 
     const handleDeleteMessage = async () => {
-        const finalData = {deletedMessageofThisUser : selectedMessages  , userID : user?._id , groupId : receiver?._id};
+        const finalData = { deletedMessageofThisUser: selectedMessages, userID: user?._id, groupId: receiver?._id };
 
-        const res =  await delete_messages_from_me(finalData , token);
-        if(res?.success){
+        const res = await delete_messages_from_me(finalData, token);
+        if (res?.success) {
             toast.success(res?.message)
             getGroupChat();
             setSelectedMessages([])
-        }else{
+        } else {
             toast.error(res?.message)
         }
     }
 
     const handleCloseChatCard = () => {
-         dispatch(setChatSelected(false))
-         setShowConversationBox('basic')
+        dispatch(setChatSelected(false))
+        setShowConversationBox('basic')
     }
 
     return (
@@ -206,7 +206,13 @@ export default function GroupChatCard({ getGroupChat  , setShowConversationBox }
                         const isSelected = selectedMessages.includes(message._id);
                         return (
                             <div key={i} className={`chat relative  ${chatClass}`}>
-                                <div onClick={() => handleSelectMessage(message._id)} className={`avatar chat-image mx-4 flex items-center justify-center placeholder ${isSelected && theme  === 'on' ? 'ring-2 ring-slate-900' : 'ring-2 ring-white'}`}>
+                                <div
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleSelectMessage(message._id);
+                                    }}
+                                    className={`avatar chat-image mx-4 flex items-center justify-center placeholder ${isSelected ? 'ring-2 ring-slate-900' : ''}`}
+                                >
                                     <div className="bg-neutral-focus text-neutral-content rounded-full w-8">
                                         <span className="text-xs">{avatarText}</span>
                                     </div>
