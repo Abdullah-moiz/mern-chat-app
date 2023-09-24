@@ -10,9 +10,11 @@
 - Register ✔
 - Private (1 v 1 Chat) ✔
 - Detect Typing and display user name ✔
-- group Chat
-- Add people to group
-- Remove people from group
+- group Chat ✔
+- Add people to group ✔
+- Remove people from group ✔
+- online user Detection ✔
+- Dark & Light Mode ✔
 
 
 
@@ -43,26 +45,27 @@ To run this project, you will need to add the following environment variables to
 
 
 ##### Main Page
-![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/1156b73a-732b-467e-a1e1-a1cfb927b6fb)
+![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/6014b8e6-57f1-4d05-88d6-4486be7230b7)
+
+![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/a0adc864-548f-4cf3-9dc4-4acb0e95e00f)
 
 
-
-##### Chat with Other users
-![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/5d7192cf-b08f-4f66-a7e2-facaae6630f6)
+![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/45061f37-262f-4a14-9261-30f8add19a03)
 
 
-
-![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/cadeba09-59b9-44da-ab6f-3d0ee0b23a2f)
-
-
+##### Create Groups
+![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/f0255429-c9d2-4959-b778-c46d16e93e92)
 
 
+##### Typing Detection in both Group and One - One Chat
+![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/eaff513a-e108-4605-a343-a3fd4d9e3597)
+
+##### Search Groups / Search Users
+![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/36a1670a-1d86-49ed-a3c3-b5bbf9bc4940)
 
 
+##### Online User Detection
 
-##### Detect Typing
-![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/5063cf11-758e-4a43-8037-60d5fed2c0d3)
-9a7c123c1312)
-
+![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/0ecebbdc-56b6-41a5-b5a8-715d3796f3bb)
 
   
