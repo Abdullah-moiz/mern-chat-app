@@ -1,5 +1,6 @@
 ###### Chat Application Using MERN STACK & SocketIO
 
+- don't forget to leave a star ! :)
 
 ## Authors
 
