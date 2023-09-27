@@ -46,27 +46,52 @@ To run this project, you will need to add the following environment variables to
 
 
 ##### Main Page
-![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/6014b8e6-57f1-4d05-88d6-4486be7230b7)
 
-![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/a0adc864-548f-4cf3-9dc4-4acb0e95e00f)
+![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/b91ab8e3-12ae-45ba-8d0f-06a286f31278)
 
 
-![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/45061f37-262f-4a14-9261-30f8add19a03)
+![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/08eb8c71-35ae-4845-b57b-82a7b3d9e91c)
+
+
+##### Groups
+
+![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/7bc9ae24-aa77-4602-a4e0-755356a86c03)
 
 
 ##### Create Groups
-![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/f0255429-c9d2-4959-b778-c46d16e93e92)
+
+![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/cb194d66-0c33-4114-905f-ec34caa62ade)
+
+
+##### New Group Added
+
+![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/bff6d502-2486-4577-863a-ada3872fa748)
+
+
+##### Admin Can Delete group
+
+![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/07b45b9d-9c95-4dcb-91eb-ca51f2d5f08b)
+
+
+##### Delete Messages from ME
+
+![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/a4994dc0-dc74-4946-bcb5-84bd5f675d1e)
 
 
 ##### Typing Detection in both Group and One - One Chat
-![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/eaff513a-e108-4605-a343-a3fd4d9e3597)
+
+![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/2facbf19-e6b3-4712-984a-3439d08a471c)
+
 
 ##### Search Groups / Search Users
-![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/36a1670a-1d86-49ed-a3c3-b5bbf9bc4940)
+
+![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/b9ffb7f7-70d1-4fa8-b3f3-a6b945145b87)
+
 
 
 ##### Online User Detection
 
-![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/0ecebbdc-56b6-41a5-b5a8-715d3796f3bb)
+![image](https://github.com/Abdullah-moiz/mern-chat-app/assets/90745903/e5b6c919-9f6d-45f2-b0aa-de912eb52a41)
+
 
   
