@@ -9,10 +9,20 @@
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
+  "resolutions": {
+    "@types/react": "17.0.2",
+    "@types/react-dom": "17.0.2"
+  },
   "dependencies": {
+    "@emoji-mart/data": "^1.1.2",
+    "@emoji-mart/react": "^1.1.1",
     "@reduxjs/toolkit": "^1.9.5",
+    "@types/emoji-mart": "^3.0.14",
+    "emoji-mart": "^5.5.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-emoji-picker": "^1.0.13",
+    "react-emoji-render": "^2.0.1",
     "react-hook-form": "^7.45.1",
     "react-icons": "^4.10.1",
     "react-loader-spinner": "^5.3.4",
