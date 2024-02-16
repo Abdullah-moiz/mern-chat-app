@@ -15,6 +15,7 @@
 - Add people to group ✔
 - Remove people from group ✔
 - online user Detection ✔
+- Send Emoji ✔
 - Dark & Light Mode ✔
 
 
