@@ -5,6 +5,7 @@
 ## Authors
 
 - [Abdullah Moiz](https://www.github.com/Abdullah-moiz)
+- [YassineAzedine](https://github.com/YassineAzedine)
 
 ## Features
 - Login ✔
